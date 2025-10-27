@@ -1,0 +1,721 @@
+title: MulticlassClassification
+name: MulticlassClassification
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: CheckBox
+        name: disable
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Dependent Variable
+        children:
+          - type: VariablesListBox
+            name: dep
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Covariates
+        children:
+          - type: VariablesListBox
+            name: covs
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Factors
+        children:
+          - type: VariablesListBox
+            name: factors
+            isTarget: true
+      - type: TextBox
+        name: seed
+        format: number
+  - type: CollapseBox
+    collapsed: true
+    label: Preprocessing
+    style: list
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: TextBox
+            name: dep_level
+            format: string
+            width: largest
+      - type: Supplier
+        name: covsSupplier
+        label: Components
+        persistentItems: false
+        stretchFactor: 1
+        format: variables
+        children:
+          - type: TargetLayoutBox
+            children:
+              - type: ListBox
+                name: stdCovs
+                valueFilter: unique
+                isTarget: true
+                itemDropBehaviour: emptyspace
+                template:
+                  type: VariableLabel
+      - type: Supplier
+        name: factorsSupplier
+        label: Components
+        persistentItems: false
+        stretchFactor: 1
+        format: variables
+        children:
+          - type: TargetLayoutBox
+            children:
+              - type: ListBox
+                name: encCat
+                valueFilter: unique
+                isTarget: true
+                itemDropBehaviour: emptyspace
+                template:
+                  type: VariableLabel
+  - type: CollapseBox
+    collapsed: true
+    label: Model Selection
+    style: list
+    children:
+      - type: ModeSelector
+        name: mode
+        stretchFactor: 1
+        children:
+          - type: Content
+            name: neural_network
+            children:
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b>Hidden Neurons</b>
+              - type: LayoutBox
+                style: list
+                margin: large
+                children:
+                  - name: hidden_neurons_tune_fix_neurons
+                    type: RadioButton
+                    optionName: hidden_neurons_tune
+                    optionPart: fix_neurons
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: fix_n_neurons
+                            format: number
+                  - name: hidden_neurons_tune_range_neurons
+                    type: RadioButton
+                    optionName: hidden_neurons_tune
+                    optionPart: range_neurons
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: min_n_neurons
+                            format: number
+                          - type: TextBox
+                            name: max_n_neurons
+                            format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b>Penalty</b>
+              - type: LayoutBox
+                margin: large
+                style: list
+                children:
+                  - type: RadioButton
+                    name: penalty_fix
+                    optionName: penalty_tune
+                    optionPart: fix_penalty
+                    children:
+                      - type: TextBox
+                        name: fix_penalty
+                        format: number
+                  - type: RadioButton
+                    name: penalty_range
+                    optionName: penalty_tune
+                    optionPart: range_penalty
+                    children:
+                      - type: TextBox
+                        name: min_penalty
+                        format: number
+                      - type: TextBox
+                        name: max_penalty
+                        format: number
+          - type: Content
+            name: random_forest
+            children:
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Number of Randomly Selected Predictors </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: mtry_fix
+                    optionName: mtry_tune
+                    optionPart: fix_mtry
+                    children:
+                      - type: TextBox
+                        name: fix_mtry
+                        format: number
+                  - type: RadioButton
+                    name: mtry_range
+                    optionName: mtry_tune
+                    optionPart: range_mtry
+                    children:
+                      - type: TextBox
+                        name: min_mtry
+                        format: number
+                      - type: TextBox
+                        name: max_mtry
+                        format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Number of Trees </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: trees_fix
+                    optionName: trees_tune
+                    optionPart: fix_trees
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: fix_trees
+                            format: number
+                  - type: RadioButton
+                    name: trees_range
+                    optionName: trees_tune
+                    optionPart: range_trees
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: min_trees
+                            format: number
+                          - type: TextBox
+                            name: max_trees
+                            format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Minimal Node Size </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: min_n_fix
+                    optionName: min_n_tune
+                    optionPart: fix_min_n
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: fix_min_n
+                            format: number
+                  - type: RadioButton
+                    name: min_n_range
+                    optionName: min_n_tune
+                    optionPart: range_min_n
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: min_min_n
+                            format: number
+                          - type: TextBox
+                            name: max_min_n
+                            format: number
+          - type: Content
+            name: xgboost
+            children:
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Number of Randomly Selected Predictors </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: mtryx_fix
+                    optionName: mtryx_tune
+                    optionPart: fix_mtryx
+                    children:
+                      - type: TextBox
+                        name: fix_mtryx
+                        format: number
+                  - type: RadioButton
+                    name: mtryx_range
+                    optionName: mtryx_tune
+                    optionPart: range_mtryx
+                    children:
+                      - type: TextBox
+                        name: min_mtryx
+                        format: number
+                      - type: TextBox
+                        name: max_mtryx
+                        format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Number of Trees </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: treesx_fix
+                    optionName: treesx_tune
+                    optionPart: fix_treesx
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: fix_treesx
+                            format: number
+                  - type: RadioButton
+                    name: treesx_range
+                    optionName: treesx_tune
+                    optionPart: range_treesx
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: min_treesx
+                            format: number
+                          - type: TextBox
+                            name: max_treesx
+                            format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Minimal Node Size </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: min_nx_fix
+                    optionName: min_nx_tune
+                    optionPart: fix_min_nx
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: fix_min_nx
+                            format: number
+                  - type: RadioButton
+                    name: min_nx_range
+                    optionName: min_nx_tune
+                    optionPart: range_min_nx
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: min_min_nx
+                            format: number
+                          - type: TextBox
+                            name: max_min_nx
+                            format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Maximal Tree Depth </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: tree_depth_fix
+                    optionName: tree_depth_tune
+                    optionPart: fix_tree_depth
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: fix_tree_depth
+                            format: number
+                  - type: RadioButton
+                    name: tree_depth_range
+                    optionName: tree_depth_tune
+                    optionPart: range_tree_depth
+                    children:
+                      - type: LayoutBox
+                        margin: large
+                        children:
+                          - type: TextBox
+                            name: min_tree_depth
+                            format: number
+                          - type: TextBox
+                            name: max_tree_depth
+                            format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b>Learning Rate</b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: learn_ratex_fix
+                    optionName: learn_ratex_tune
+                    optionPart: fix_learn_ratex
+                    children:
+                      - type: TextBox
+                        name: fix_learn_ratex
+                        format: number
+                  - type: RadioButton
+                    name: learn_ratex_range
+                    optionName: learn_ratex_tune
+                    optionPart: range_learn_ratex
+                    children:
+                      - type: TextBox
+                        name: min_learn_ratex
+                        format: number
+                      - type: TextBox
+                        name: max_learn_ratex
+                        format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b>Loss Reduction</b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: loss_reduction_fix
+                    optionName: loss_reduction_tune
+                    optionPart: fix_loss_reduction
+                    children:
+                      - type: TextBox
+                        name: fix_loss_reduction
+                        format: number
+                  - type: RadioButton
+                    name: loss_reduction_range
+                    optionName: loss_reduction_tune
+                    optionPart: range_loss_reduction
+                    children:
+                      - type: TextBox
+                        name: min_loss_reduction
+                        format: number
+                      - type: TextBox
+                        name: max_loss_reduction
+                        format: number
+          - type: Content
+            name: svm
+            children:
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Kernel </b>
+                  - type: LayoutBox
+                    margin: large
+                    children:
+                      - type: ComboBox
+                        name: kernels
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Cost </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: cost_fix
+                    optionName: cost_tune
+                    optionPart: fix_cost
+                    children:
+                      - type: TextBox
+                        name: fix_cost
+                        format: number
+                  - type: RadioButton
+                    name: cost_range
+                    optionName: cost_tune
+                    optionPart: range_cost
+                    children:
+                      - type: TextBox
+                        name: min_cost
+                        format: number
+                      - type: TextBox
+                        name: max_cost
+                        format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Margin </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: margin_fix
+                    optionName: margin_tune
+                    optionPart: fix_margin
+                    children:
+                      - type: TextBox
+                        name: fix_margin
+                        format: number
+                  - type: RadioButton
+                    name: margin_range
+                    optionName: margin_tune
+                    optionPart: range_margin
+                    children:
+                      - type: TextBox
+                        name: min_margin
+                        format: number
+                      - type: TextBox
+                        name: max_margin
+                        format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> RBF Variance (RBF Kernel Only) </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: rbf_sigma_fix
+                    optionName: rbf_sigma_tune
+                    optionPart: fix_rbf_sigma
+                    children:
+                      - type: TextBox
+                        name: fix_rbf_sigma
+                        format: number
+                  - type: RadioButton
+                    name: rbf_sigma_range
+                    optionName: rbf_sigma_tune
+                    optionPart: range_rbf_sigma
+                    children:
+                      - type: TextBox
+                        name: min_rbf_sigma
+                        format: number
+                      - type: TextBox
+                        name: max_rbf_sigma
+                        format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Polynomial Degree (Polynomial Kernel Only) </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: degree_fix
+                    optionName: degree_tune
+                    optionPart: fix_degree
+                    children:
+                      - type: TextBox
+                        name: fix_degree
+                        format: number
+                  - type: RadioButton
+                    name: degree_range
+                    optionName: degree_tune
+                    optionPart: range_degree
+                    children:
+                      - type: TextBox
+                        name: min_degree
+                        format: number
+                      - type: TextBox
+                        name: max_degree
+                        format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: Label
+                    label: <b> Scale Factor (Polynomial Kernel Only) </b>
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: RadioButton
+                    name: scale_factor_fix
+                    optionName: scale_factor_tune
+                    optionPart: fix_scale_factor
+                    children:
+                      - type: TextBox
+                        name: fix_scale_factor
+                        format: number
+                  - type: RadioButton
+                    name: scale_factor_range
+                    optionName: scale_factor_tune
+                    optionPart: range_scale_factor
+                    children:
+                      - type: TextBox
+                        name: min_scale_factor
+                        format: number
+                      - type: TextBox
+                        name: max_scale_factor
+                        format: number
+  - type: CollapseBox
+    collapsed: true
+    label: Hyperparameter Optimization
+    style: list
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: ComboBox
+            name: tuners
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: ComboBox
+            name: metrics
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: CheckBox
+            name: plot_tuner_results
+  - type: CollapseBox
+    collapsed: true
+    label: Evaluation Results
+    style: inline
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: Label
+            label: <b> Summary Metrics </b>
+          - type: CheckBox
+            name: accuracy
+          - type: CheckBox
+            name: bal_accuracy
+          - type: CheckBox
+            name: precision
+          - type: CheckBox
+            name: recall
+          - type: CheckBox
+            name: specificity
+          - type: CheckBox
+            name: sensitivity
+          - type: CheckBox
+            name: kap
+          - type: CheckBox
+            name: f_meas
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: Label
+            label: '&nbsp;'
+          - type: CheckBox
+            name: mcc
+          - type: CheckBox
+            name: j_index
+          - type: CheckBox
+            name: detection_prevalence
+          - type: CheckBox
+            name: auc_roc
+          - type: CheckBox
+            name: pr_auc
+          - type: CheckBox
+            name: gain_capture
+          - type: CheckBox
+            name: brier_score
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: Label
+            label: <b> Summary Plots </b>
+          - type: CheckBox
+            name: plot_roc_curve
+          - type: CheckBox
+            name: plot_pr_curve
+          - type: CheckBox
+            name: plot_gain_curve
+          - type: CheckBox
+            name: plot_lift_curve
+          - type: CheckBox
+            name: plot_dist_by_class
+          - type: CheckBox
+            name: plot_confusion_matrix
+  - type: CollapseBox
+    collapsed: true
+    label: Sensitivity Analysis
+    style: list
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: Label
+            label: <b> Permutation Feature Importance </b>
+          - type: LayoutBox
+            style: list
+            margin: large
+            children:
+              - type: CheckBox
+                name: pfi
+          - type: Label
+            label: <b> SHAP Values </b>
+          - type: LayoutBox
+            style: inline
+            margin: large
+            children:
+              - type: CheckBox
+                name: shap_mean
+              - type: CheckBox
+                name: shap_dir
+              - type: CheckBox
+                name: shap_box
+              - type: CheckBox
+                name: shap_swarm
+          - type: Label
+            label: <b> Olden's Method &nbsp; &nbsp; &nbsp;</b>
+          - type: LayoutBox
+            style: list
+            margin: large
+            children:
+              - type: CheckBox
+                name: olden
+  - type: CollapseBox
+    collapsed: true
+    label: Save Results
+    style: list
+    stretchFactor: 1
+    children:
+      - type: Output
+        name: pred_class
+      - type: Output
+        name: pred_prob
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: Output
+        name: dataset_id

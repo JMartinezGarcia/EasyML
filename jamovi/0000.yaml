@@ -1,0 +1,51 @@
+---
+title: What the Package Does (Title Case)
+name: EasyML
+version: 0.0.0
+jms: '1.0'
+authors:
+  - Who wrote it
+maintainer: The package maintainer <yourself@somewhere.net>
+date: '1970-01-01'
+type: R
+description: >-
+  More about what it does (maybe more than one line) Use four spaces when
+  indenting paragraphs within the Description.
+analyses:
+  - title: Regression
+    name: Regression
+    ns: EasyML
+    menuGroup: EasyML
+    menuTitle: Regression
+    description: >
+      Linear regression is used to explore the relationship between a continuous
+      dependent variable, and one or more continuous and/or categorical
+      explanatory variables. Other statistical methods, such as ANOVA and
+      ANCOVA, are in reality just forms of linear regression.
+    category: analyses
+  - title: Binary Classification
+    name: BinaryClassification
+    ns: EasyML
+    menuGroup: EasyML
+    menuTitle: Binary Classification
+    description: >
+      Linear regression is used to explore the relationship between a continuous
+      dependent variable, and one or more continuous and/or categorical
+      explanatory variables. Other statistical methods, such as ANOVA and
+      ANCOVA, are in reality just forms of linear regression.
+    category: analyses
+  - title: Multiclass Classification
+    name: MulticlassClassification
+    ns: EasyML
+    menuGroup: EasyML
+    menuTitle: Multiclass Classification
+    description: >
+      Linear regression is used to explore the relationship between a continuous
+      dependent variable, and one or more continuous and/or categorical
+      explanatory variables. Other statistical methods, such as ANOVA and
+      ANCOVA, are in reality just forms of linear regression.
+    category: analyses
+usesNative: true
+minApp: 1.0.8
+
+...

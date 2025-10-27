@@ -1,0 +1,906 @@
+---
+name:  MulticlassClassification
+title: "Multiclass Classification"
+menuGroup: EasyML
+version: '1.0.0'
+jas: '1.2'
+
+
+
+description:
+    main: >
+        Linear regression is used to explore the relationship between a
+        continuous dependent variable, and one or more continuous and/or
+        categorical explanatory variables. Other statistical methods, such as
+        ANOVA and ANCOVA, are in reality just forms of linear regression.
+    R:
+        dontrun: false
+        usage: |
+
+options:
+
+    - name: disable
+      title: "Run"
+      type: Bool
+      default: false
+
+    - name: seed
+      title: "Random Seed: "
+      type: Integer
+      default: 42
+
+    - name: data
+      type: Data
+      description:
+          R: the data as a data frame
+
+    - name: dep
+      type: Variable
+      title: Dependent Variable
+      rejectUnusedLevels: true
+      suggested:
+        - nominal
+      permitted:
+        - factor
+      default:
+      description:
+          R: the fixed factors from `data`
+
+    - name: covs
+      title: Covariates
+      type: Variables
+      suggested:
+        - continuous
+      permitted:
+        - numeric
+      default:
+      description:
+          R: the covariates from `data`
+
+    - name: factors
+      title: Factors
+      type: Variables
+      rejectUnusedLevels: true
+      suggested:
+        - nominal
+      permitted:
+        - factor
+      default:
+      description:
+          R: the fixed factors from `data`
+
+    - name: stdCovs
+      title: Covariate Scaling
+      type: Variables
+      default: null
+
+    - name: encCat
+      title: Factor Encoding
+      type: Variables
+      default: null
+
+    - name: dep_level
+      title: "Dependent Variable Levels"
+      type: String
+
+
+  #######################################
+  #               MODELS                #
+  #######################################
+
+    - name: mode
+      title: ""
+      type: List
+      options:
+            - name: neural_network
+              title: 'Neural Network'
+            - name: random_forest
+              title: 'Random Forest'
+            - name: xgboost
+              title: "XGBOOST"
+            - name: svm
+              title: "Support Vector Machine"
+      default: neural_network
+
+    ############ NEURAL NETWORK #################
+
+    - name: hidden_neurons_tune
+      type: List
+      title: Select Hyperparameters
+      options:
+        - name: range_neurons
+          title: Range
+        - name: fix_neurons
+          title: Fixed Value
+      default: range_neurons
+
+    - name: penalty_tune
+      type: List
+      title: Fix Value or Range
+      options:
+        - name: range_penalty
+          title: Range
+        - name: fix_penalty
+          title: Fixed Value
+      default: range_penalty
+
+    - name: fix_n_neurons
+      title: "Number of Hidden Neurons:"
+      type: Integer
+
+    - name: fix_penalty
+      title: "Penalty: "
+      type: Number
+
+    - name: min_n_neurons
+      title: "Min Number of Neurons: "
+      type: Integer
+      min: 1
+      max: 100
+      default: 5
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: max_n_neurons
+      title: "Max Number of Neurons:"
+      type: Integer
+      min: 5
+      max: 100
+      default: 20
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: min_penalty
+      title: "Minimum Penalty:  (log10 scale)"
+      type: Number
+      min: -5
+      max: 0
+      default: -3
+      description:
+          R: >
+            log10()
+
+    - name: max_penalty
+      title: "Maximum Penalty:  (log10 scale)"
+      type: Number
+      min: 0
+      max: 5
+      default: 3
+      description:
+          R: >
+            log10()
+
+############ RANDOM FOREST #################
+
+    - name: mtry_tune
+      type: List
+      title: Select Hyperparameters
+      options:
+        - name: fix_mtry
+          title: Fixed Value
+        - name: range_mtry
+          title: Range
+      default: range_mtry
+
+    - name: trees_tune
+      type: List
+      title: Fix Value or Range
+      options:
+        - name: fix_trees
+          title: Fixed Value
+        - name: range_trees
+          title: Range
+      default: range_trees
+
+    - name: min_n_tune
+      type: List
+      title: Fix Value or Range
+      options:
+        - name: fix_min_n
+          title: Fixed Value
+        - name: range_min_n
+          title: Range
+      default: range_min_n
+
+    - name: fix_mtry
+      title: "Number of Randomly Selected Predictors:"
+      type: Integer
+
+    - name: fix_trees
+      title: "Number of Trees:"
+      type: Number
+
+    - name: fix_min_n
+      title: "Number of Minimal Node Size:"
+      type: Integer
+
+    - name: min_mtry
+      title: "Minimum Number of Randomly Selected Predictors:"
+      type: Integer
+      min: 2
+      max: 10
+      default: 3
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: max_mtry
+      title: "Maximum Number of Random Selected Predictors:"
+      type: Integer
+      min: 2
+      max: 10
+      default: 5
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: min_trees
+      title: "Minimum Number of Trees:"
+      type: Integer
+      min: 50
+      max: 300
+      default: 50
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: max_trees
+      title: "Maximum Number of Trees:"
+      type: Integer
+      min: 50
+      max: 300
+      default: 150
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: min_min_n
+      title: "Minimum Minimal Node Size:"
+      type: Integer
+      min: 2
+      max: 50
+      default: 5
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: max_min_n
+      title: "Maximum Minimal Node Size:"
+      type: Integer
+      min: 2
+      max: 50
+      default: 25
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+############ XGBOOST #################
+
+    - name: mtryx_tune
+      type: List
+      title: Select Hyperparameters
+      options:
+        - name: fix_mtryx
+          title: Fixed Value
+        - name: range_mtryx
+          title: Range
+      default: range_mtryx
+
+    - name: treesx_tune
+      type: List
+      title: Fix Value or Range
+      options:
+        - name: fix_treesx
+          title: Fixed Value
+        - name: range_treesx
+          title: Range
+      default: range_treesx
+
+    - name: min_nx_tune
+      type: List
+      title: Fix Value or Range
+      options:
+        - name: fix_min_nx
+          title: Fixed Value
+        - name: range_min_nx
+          title: Range
+      default: range_min_nx
+
+    - name: tree_depth_tune
+      type: List
+      title: Fix Value or Range
+      options:
+        - name: fix_tree_depth
+          title: Fixed Value
+        - name: range_tree_depth
+          title: Range
+      default: range_tree_depth
+
+    - name: learn_ratex_tune
+      type: List
+      title: Fix Value or Range
+      options:
+        - name: fix_learn_ratex
+          title: Fixed Value
+        - name: range_learn_ratex
+          title: Range
+      default: range_learn_ratex
+
+    - name: loss_reduction_tune
+      type: List
+      title: Fix Value or Range
+      options:
+        - name: fix_loss_reduction
+          title: Fixed Value
+        - name: range_loss_reduction
+          title: Range
+      default: range_loss_reduction
+
+    - name: fix_mtryx
+      title: "Number of Randomly Selected Predictors:"
+      type: Integer
+
+    - name: fix_treesx
+      title: "Number of Trees"
+      type: Number
+
+    - name: fix_min_nx
+      title: "Number of Minimal Node Size:"
+      type: Integer
+
+    - name: fix_tree_depth
+      title: "Maximum Tree Depth:"
+      type: Integer
+
+    - name: fix_learn_ratex
+      title: "Learning Rate:"
+      type: Number
+
+    - name: fix_loss_reduction
+      title: "Loss Reduction:"
+      type: Number
+
+    - name: min_mtryx
+      title: "Minimum Number of Randomly Selected Predictors:"
+      type: Integer
+      min: 2
+      max: 10
+      default: 3
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: max_mtryx
+      title: "Maximum Number of Random Selected Predictors:"
+      type: Integer
+      min: 2
+      max: 10
+      default: 5
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: min_treesx
+      title: "Minimum Number of Trees:"
+      type: Integer
+      min: 50
+      max: 300
+      default: 50
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: max_treesx
+      title: "Maximum Number of Trees:"
+      type: Integer
+      min: 50
+      max: 300
+      default: 150
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: min_min_nx
+      title: "Minimum Minimal Node Size:"
+      type: Integer
+      min: 2
+      max: 50
+      default: 5
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: max_min_nx
+      title: "Maximum Minimal Node Size:"
+      type: Integer
+      min: 2
+      max: 50
+      default: 25
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: min_tree_depth
+      title: "Minimum Maximal Tree Depth:"
+      type: Integer
+      min: 2
+      max: 50
+      default: 5
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: max_tree_depth
+      title: "Maximum Maximal Tree Depth:"
+      type: Integer
+      min: 2
+      max: 50
+      default: 25
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: min_learn_ratex
+      title: "Minimum Learning Rate:  (log10 scale)"
+      type: Number
+      min: -5
+      max: -1
+      default: -3
+      description:
+          R: >
+            log10()
+
+    - name: max_learn_ratex
+      title: "Minimum Learning Rate:  (log10 scale)"
+      type: Number
+      min: -5
+      max: -1
+      default: -1
+      description:
+          R: >
+            log10()
+
+    - name: min_loss_reduction
+      title: "Minimum Loss Reduction:  (log10 scale)"
+      type: Number
+      min: -5
+      max: -1
+      default: -3
+      description:
+          R: >
+            log10()
+
+    - name: max_loss_reduction
+      title: "Maximum Loss Reduction:  (log10 scale)"
+      type: Number
+      min: -5
+      max: -1
+      default: -1
+      description:
+          R: >
+            log10()
+
+############# SVM ###################
+
+    - name: kernels
+      type: List
+      title: Select Kernel
+      options:
+        - name: linear
+          title: Linear
+
+        - name: rbf
+          title: Radial Basis Function (RBF)
+
+        - name: polynom¡al
+          title: Polynomial
+
+    - name: cost_tune
+      type: List
+      title: Select Hyperparameters
+      options:
+        - name: fix_cost
+          title: Fixed Value
+        - name: range_cost
+          title: Range
+      default: range_cost
+
+    - name: margin_tune
+      type: List
+      title: Select Hyperparameters
+      options:
+        - name: fix_margin
+          title: Fixed Value
+        - name: range_margin
+          title: Range
+      default: range_margin
+
+    - name: rbf_sigma_tune
+      type: List
+      title: Select Hyperparameters
+      options:
+        - name: fix_rbf_sigma
+          title: Fixed Value
+        - name: range_rbf_sigma
+          title: Range
+      default: range_rbf_sigma
+
+    - name: degree_tune
+      type: List
+      title: Select Hyperparameters
+      options:
+        - name: fix_degree
+          title: Fixed Value
+        - name: range_degree
+          title: Range
+      default: range_degree
+
+    - name: scale_factor_tune
+      type: List
+      title: Select Hyperparameters
+      options:
+        - name: fix_scale_factor
+          title: Fixed Value
+        - name: range_scale_factor
+          title: Range
+      default: range_scale_factor
+
+    - name: fix_cost
+      title: "Cost: "
+      type: Number
+
+    - name: fix_margin
+      title: "Margin: "
+      type: Number
+
+    - name: fix_rbf_sigma
+      title: "RBF Variance: "
+      type: Number
+
+    - name: fix_degree
+      title: "Polynomial Degree: "
+      type: Number
+
+    - name: fix_scale_factor
+      title: "Scale Factor: "
+      type: Number
+
+    - name: min_cost
+      title: "Minimum Cost:  (log2 scale)"
+      type: Number
+      min: -10
+      max: 5
+      default: -5
+      description:
+          R: >
+            log2()
+
+    - name: max_cost
+      title: "Maximum Cost:  (log2 scale)"
+      type: Number
+      min: -10
+      max: 5
+      default: 3
+      description:
+          R: >
+            log2()
+
+    - name: min_margin
+      title: "Minimum Margin: "
+      type: Number
+      min: 0.01
+      max: 0.3
+      default: 0.05
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: max_margin
+      title: "Maximum Margin: "
+      type: Number
+      min: 0.01
+      max: 0.3
+      default: 0.2
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: min_rbf_sigma
+      title: "Minimum RBF variance:  (log10 scale)"
+      type: Number
+      min: -5
+      max: -1
+      default: -3
+      description:
+          R: >
+            log10()
+
+    - name: max_rbf_sigma
+      title: "Maximum RBF variance:  (log10 scale)"
+      type: Number
+      min: -5
+      max: -1
+      default: -1
+      description:
+          R: >
+            log10()
+
+    - name: min_degree
+      title: "Minimum Polynomial Degree: "
+      type: Integer
+      min: 2
+      max: 5
+      default: 2
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: max_degree
+      title: "Maximum Polynomial Degree: "
+      type: Integer
+      min: 2
+      max: 5
+      default: 3
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the confidence
+            interval width
+
+    - name: min_scale_factor
+      title: "Minimum Scale Factor:  (log10 scale) "
+      type: Number
+      min: -5
+      max: -1
+      default: -3
+      description:
+          R: >
+            log10()
+
+    - name: max_scale_factor
+      title: "Maximum Scale Factor:  (log10 scale) "
+      type: Number
+      min: -5
+      max: -1
+      default: -1
+      description:
+          R: >
+            log10()
+
+#######################################
+#               TUNERS                #
+#######################################
+
+
+
+
+    - name: tuners
+      type: List
+      title: Select Tuner
+      options:
+        - name: none
+          title: Bayesian Optimization
+        - name: grid_search_cv
+          title: Grid Search CV
+      default: none
+
+    - name: metrics
+      type: List
+      title: Select Metric
+      options:
+        - name: accuracy
+          title: Accuracy
+        - name: bal_accuracy
+          title: "Balanced Accuracy"
+        - name: precision
+          title: Precision
+        - name: recall
+          title: Recall
+        - name: specificity
+          title: Specificity
+        - name: sensitivity
+          title: Sensitivity
+        - name: kap
+          title: Kappa
+        - name: f_meas
+          title: F1_Score
+        - name: mcc
+          title: MCC
+        - name: j_index
+          title: J_Index
+        - name: detection_prevalence
+          title: "Detection Prevalence"
+        - name: auc_roc
+          title: "AUC ROC"
+        - name: pr_auc
+          title: "AUC PR"
+        - name: gain_capture
+          title: "Gain Capture"
+        - name: brier_score
+          title: "Brier Score"
+      default: accuracy
+
+    - name: plot_tuner_results
+      title: Plot Tuner Results
+      type: Bool
+      default: false
+
+#######################################
+#               Plots                #
+#######################################
+
+    - name: accuracy
+      title: Accuracy
+      type: Bool
+      default: false
+
+    - name: bal_accuracy
+      title: Balanced Accuracy
+      type: Bool
+      default: false
+
+    - name: precision
+      title: Precision
+      type: Bool
+      default: false
+
+    - name: recall
+      title: Recall
+      type: Bool
+      default: false
+
+    - name: specificity
+      title: Specificity
+      type: Bool
+      default: false
+
+    - name: sensitivity
+      title: Sensitivity
+      type: Bool
+      default: false
+
+    - name: kap
+      title: Kappa
+      type: Bool
+      default: false
+
+    - name: f_meas
+      title: F1_Score
+      type: Bool
+      default: false
+
+    - name: mcc
+      title: MCC
+      type: Bool
+      default: false
+
+    - name: j_index
+      title: J_index
+      type: Bool
+      default: false
+
+    - name: detection_prevalence
+      title: Detection Prevalence
+      type: Bool
+      default: false
+
+    - name: auc_roc
+      title: AUC ROC
+      type: Bool
+      default: false
+
+    - name: pr_auc
+      title: AUC PR
+      type: Bool
+      default: false
+
+    - name: gain_capture
+      title: Gain Capture
+      type: Bool
+      default: false
+
+    - name: brier_score
+      title: Brier Score
+      type: Bool
+      default: false
+
+    - name: plot_roc_curve
+      title: Plot ROC Curve
+      type: Bool
+      default: false
+
+    - name: plot_pr_curve
+      title: Plot Precision Recall Curve
+      type: Bool
+      default: false
+
+    - name: plot_gain_curve
+      title: Plot Gain Capture Curve
+      type: Bool
+      default: false
+
+    - name: plot_lift_curve
+      title: Plot Lift Curve
+      type: Bool
+      default: false
+
+    - name: plot_dist_by_class
+      title: Plot Output Distribution by Class
+      type: Bool
+      default: false
+
+    - name: plot_confusion_matrix
+      title: Plot Confusion Matrix
+      type: Bool
+      default: false
+
+
+##############################################
+#        Sensitivity Analysis                #
+##############################################
+
+    - name: pfi
+      title: Permutation Feature Importance
+      type: Bool
+      default: false
+
+    - name: shap_mean
+      title: Mean Absolute Value
+      type: Bool
+      default: false
+
+    - name: shap_dir
+      title: Directional Sensitivity
+      type: Bool
+      default: false
+
+    - name: shap_box
+      title: Boxplot
+      type: Bool
+      default: false
+
+    - name: shap_swarm
+      title: Swarmplot
+      type: Bool
+      default: false
+
+    - name: olden
+      title: Olden's Method
+      type: Bool
+      default: false
+
+## Outputs
+
+    - name: pred_class
+      title: Predicted Classes
+      type: Output
+  
+    - name: pred_prob
+      title: Predicted Probabilities
+      type: Output
+
+    - name: dataset_id
+      title: Dataset Label
+      type: Output
+
+

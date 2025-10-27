@@ -1,0 +1,16 @@
+refs:
+   EasyML:
+       type: 'software'
+       author: Martínez-García, J., Montaño, J. J., & Sesé, A.
+       year: 2025
+       title: "EasyML: Machine Learning for Everyone"
+       publisher: '(Version 7.5.6) [jamovi module]. URL https://github.com/JMartinezGarcia/MLwrap'
+       url: https://github.com/JMartinezGarcia/MLwrap
+
+   MLwrap:
+        type: 'software'
+        author: Martínez-García, J., Montaño, J. J., & Sesé, A.
+        year: 2025
+        title: "MLwrap: Machine Learning Modelling for Everyone"
+        publisher: '(Version 0.2.1) [R package]. URL https://CRAN.R-project.org/package=MLwrap'
+        url: https://CRAN.R-project.org/package=MLwrap
