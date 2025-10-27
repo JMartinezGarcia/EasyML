@@ -7,8 +7,8 @@
         `author`="Mart\u00EDnez-Garc\u00EDa, J., Monta\u00F1o, J. J., & Ses\u00E9, A.", 
         `year`=2025, 
         `title`="EasyML: Machine Learning for Everyone", 
-        `publisher`="(Version 7.5.6) [jamovi module]. URL https://github.com/JMartinezGarcia/MLwrap", 
-        `url`="https://github.com/JMartinezGarcia/MLwrap"), 
+        `publisher`="(Version 0.0.0) [jamovi module]. URL https://github.com/JMartinezGarcia/EasyML", 
+        `url`="https://github.com/JMartinezGarcia/EasyML"), 
     `MLwrap`=list(
         `type`="software", 
         `author`="Mart\u00EDnez-Garc\u00EDa, J., Monta\u00F1o, J. J., & Ses\u00E9, A.", 

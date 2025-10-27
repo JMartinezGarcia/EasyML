@@ -2,13 +2,14 @@
 name:  BinaryClassification
 title: Binary Classification
 jrs:   '1.1'
-refs: EasyML
+refs:
+    - EasyML
+    - MLwrap
 
 items:
     - name:  text
       title: Binary Classification
       type:  Preformatted
-      refs: MLwrap
 
     - name:  summary
       title: Summary Results
@@ -243,95 +244,6 @@ items:
       type: Property
       description: The underlying `aov` object
 
-    - name: table_sensitivity
-      title: Sensitivity Analysis Tables
-      type: Array
-      description: an array of plots
-      template:
-          title: $key
-          type:  Table
-          clearWith:  # <-- here
-                - seed
-                - dep
-                - dep_level
-                - covs
-                - factors
-                - stdCovs
-                - encCat
-                - mode
-                - metrics
-                - tuners
-                - hidden_neurons_tune
-                - fix_n_neurons
-                - min_n_neurons
-                - max_n_neurons
-                - penalty_tune
-                - fix_penalty
-                - min_penalty
-                - max_penalty
-                - mtry_tune
-                - fix_mtry
-                - min_mtry
-                - max_mtry
-                - trees_tune
-                - fix_trees
-                - min_trees
-                - max_trees
-                - min_n_tune
-                - fix_min_n
-                - min_min_n
-                - max_min_n
-                - mtryx_tune
-                - fix_mtryx
-                - min_mtryx
-                - max_mtryx
-                - treesx_tune
-                - fix_treesx
-                - min_treesx
-                - max_treesx
-                - min_nx_tune
-                - fix_min_nx
-                - min_min_nx
-                - max_min_nx
-                - tree_depth_tune
-                - fix_tree_depth
-                - min_tree_depth
-                - max_tree_depth
-                - learn_ratex_tune
-                - fix_learn_ratex
-                - min_learn_ratex
-                - max_learn_ratex
-                - loss_reduction_tune
-                - fix_loss_reduction
-                - min_loss_reduction
-                - max_loss_reduction
-                - kernels
-                - cost_tune
-                - fix_cost
-                - min_cost
-                - max_cost
-                - margin_tune
-                - fix_margin
-                - min_margin
-                - max_margin
-                - rbf_sigma_tune
-                - fix_rbf_sigma
-                - min_rbf_sigma
-                - max_rbf_sigma
-                - degree_tune
-                - fix_degree
-                - min_degree
-                - max_degree
-                - scale_factor_tune
-                - fix_scale_factor
-                - min_scale_factor
-                - max_scale_factor
-          columns:
-                    - name: var
-                      title: "Feature"
-                      type: text
-
-
     - name: plots_sensitivity
       title: Sensitivity Analysis Plots
       type: Array
@@ -419,6 +331,94 @@ items:
                 - fix_scale_factor
                 - min_scale_factor
                 - max_scale_factor
+
+    - name: table_sensitivity
+      title: Sensitivity Analysis Tables
+      type: Array
+      description: an array of plots
+      template:
+          title: $key
+          type:  Table
+          clearWith:  # <-- here
+                - seed
+                - dep
+                - dep_level
+                - covs
+                - factors
+                - stdCovs
+                - encCat
+                - mode
+                - metrics
+                - tuners
+                - hidden_neurons_tune
+                - fix_n_neurons
+                - min_n_neurons
+                - max_n_neurons
+                - penalty_tune
+                - fix_penalty
+                - min_penalty
+                - max_penalty
+                - mtry_tune
+                - fix_mtry
+                - min_mtry
+                - max_mtry
+                - trees_tune
+                - fix_trees
+                - min_trees
+                - max_trees
+                - min_n_tune
+                - fix_min_n
+                - min_min_n
+                - max_min_n
+                - mtryx_tune
+                - fix_mtryx
+                - min_mtryx
+                - max_mtryx
+                - treesx_tune
+                - fix_treesx
+                - min_treesx
+                - max_treesx
+                - min_nx_tune
+                - fix_min_nx
+                - min_min_nx
+                - max_min_nx
+                - tree_depth_tune
+                - fix_tree_depth
+                - min_tree_depth
+                - max_tree_depth
+                - learn_ratex_tune
+                - fix_learn_ratex
+                - min_learn_ratex
+                - max_learn_ratex
+                - loss_reduction_tune
+                - fix_loss_reduction
+                - min_loss_reduction
+                - max_loss_reduction
+                - kernels
+                - cost_tune
+                - fix_cost
+                - min_cost
+                - max_cost
+                - margin_tune
+                - fix_margin
+                - min_margin
+                - max_margin
+                - rbf_sigma_tune
+                - fix_rbf_sigma
+                - min_rbf_sigma
+                - max_rbf_sigma
+                - degree_tune
+                - fix_degree
+                - min_degree
+                - max_degree
+                - scale_factor_tune
+                - fix_scale_factor
+                - min_scale_factor
+                - max_scale_factor
+          columns:
+                    - name: var
+                      title: "Feature"
+                      type: text
 
     - name: pred_class
       title: Predicted Class

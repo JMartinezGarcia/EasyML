@@ -1,4 +1,4 @@
-title: MulticlassClassification
+title: Multiclass Classification
 name: MulticlassClassification
 jus: '3.0'
 stage: 0
@@ -714,8 +714,5 @@ children:
         name: pred_class
       - type: Output
         name: pred_prob
-  - type: LayoutBox
-    margin: large
-    children:
       - type: Output
         name: dataset_id

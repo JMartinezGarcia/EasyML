@@ -2,13 +2,14 @@
 name:  Regression
 title: Regression
 jrs:   '1.1'
-refs: EasyML
+refs:
+    - EasyML
+    - MLwrap
 
 items:
     - name:  text
       title: Regression Analysis
       type:  Preformatted
-      refs:  MLwrap
 
     - name:  summary
       title: Summary Results

@@ -19,6 +19,7 @@ RegressionClass <- R6::R6Class(
             private$.form <- NULL
             private$.sobol_jansen <- FALSE
             private$.feature_names <- NULL
+
             private$.initSummaryTable()
             private$.initResultsPlots()
             private$.initSensitivityPlots()

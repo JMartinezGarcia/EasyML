@@ -4,8 +4,8 @@ refs:
        author: Martínez-García, J., Montaño, J. J., & Sesé, A.
        year: 2025
        title: "EasyML: Machine Learning for Everyone"
-       publisher: '(Version 7.5.6) [jamovi module]. URL https://github.com/JMartinezGarcia/MLwrap'
-       url: https://github.com/JMartinezGarcia/MLwrap
+       publisher: '(Version 0.0.0) [jamovi module]. URL https://github.com/JMartinezGarcia/EasyML'
+       url: https://github.com/JMartinezGarcia/EasyML
 
    MLwrap:
         type: 'software'

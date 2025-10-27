@@ -938,12 +938,13 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="",
                 title="Regression",
-                refs="EasyML")
+                refs=list(
+                    "EasyML",
+                    "MLwrap"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
-                title="Regression Analysis",
-                refs="MLwrap"))
+                title="Regression Analysis"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="summary",
