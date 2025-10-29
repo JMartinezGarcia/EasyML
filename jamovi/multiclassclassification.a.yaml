@@ -523,16 +523,6 @@ options:
           title: Range
       default: range_cost
 
-    - name: margin_tune
-      type: List
-      title: Select Hyperparameters
-      options:
-        - name: fix_margin
-          title: Fixed Value
-        - name: range_margin
-          title: Range
-      default: range_margin
-
     - name: rbf_sigma_tune
       type: List
       title: Select Hyperparameters
@@ -567,10 +557,6 @@ options:
       title: "Cost: "
       type: Number
 
-    - name: fix_margin
-      title: "Margin: "
-      type: Number
-
     - name: fix_rbf_sigma
       title: "RBF Variance: "
       type: Number
@@ -602,28 +588,6 @@ options:
       description:
           R: >
             log2()
-
-    - name: min_margin
-      title: "Minimum Margin: "
-      type: Number
-      min: 0.01
-      max: 0.3
-      default: 0.05
-      description:
-          R: >
-            a number between 50 and 99.9 (default: 95) specifying the confidence
-            interval width
-
-    - name: max_margin
-      title: "Maximum Margin: "
-      type: Number
-      min: 0.01
-      max: 0.3
-      default: 0.2
-      description:
-          R: >
-            a number between 50 and 99.9 (default: 95) specifying the confidence
-            interval width
 
     - name: min_rbf_sigma
       title: "Minimum RBF variance:  (log10 scale)"

@@ -655,7 +655,9 @@ RegressionClass <- R6::R6Class(
 
                 } else {
 
-                    degree = c(self$options$min_degree, self$options$max_degree)
+                    degree = c(as.numeric(self$options$min_degree),
+                               as.numeric(self$options$max_degree)
+                               )
 
                 }
 

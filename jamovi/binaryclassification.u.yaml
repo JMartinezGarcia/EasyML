@@ -477,33 +477,6 @@ children:
                 margin: large
                 children:
                   - type: Label
-                    label: <b> Margin </b>
-              - type: LayoutBox
-                margin: large
-                children:
-                  - type: RadioButton
-                    name: margin_fix
-                    optionName: margin_tune
-                    optionPart: fix_margin
-                    children:
-                      - type: TextBox
-                        name: fix_margin
-                        format: number
-                  - type: RadioButton
-                    name: margin_range
-                    optionName: margin_tune
-                    optionPart: range_margin
-                    children:
-                      - type: TextBox
-                        name: min_margin
-                        format: number
-                      - type: TextBox
-                        name: max_margin
-                        format: number
-              - type: LayoutBox
-                margin: large
-                children:
-                  - type: Label
                     label: <b> RBF Variance (RBF Kernel Only) </b>
               - type: LayoutBox
                 margin: large
