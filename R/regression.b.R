@@ -454,7 +454,7 @@ RegressionClass <- R6::R6Class(
 
                 } else {
 
-                    tress = c(self$options$min_trees, self$options$max_trees)
+                    trees = c(self$options$min_trees, self$options$max_trees)
 
                 }
 
@@ -513,7 +513,7 @@ RegressionClass <- R6::R6Class(
 
                 } else {
 
-                    tress = c(self$options$min_treesx, self$options$max_treesx)
+                    trees = c(self$options$min_treesx, self$options$max_treesx)
 
                 }
 

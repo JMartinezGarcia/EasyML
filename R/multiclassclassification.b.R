@@ -571,7 +571,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
                 } else {
 
-                    tress = c(self$options$min_trees, self$options$max_trees)
+                    trees = c(self$options$min_trees, self$options$max_trees)
 
                 }
 
@@ -630,7 +630,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
                 } else {
 
-                    tress = c(self$options$min_treesx, self$options$max_treesx)
+                    trees = c(self$options$min_treesx, self$options$max_treesx)
 
                 }
 
