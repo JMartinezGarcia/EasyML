@@ -6,6 +6,7 @@ compilerMode: tame
 children:
   - type: LayoutBox
     margin: large
+    stretchFactor: 1
     children:
       - type: CheckBox
         name: disable

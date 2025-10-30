@@ -122,10 +122,12 @@ options:
     - name: fix_n_neurons
       title: "Number of Hidden Neurons:"
       type: Integer
+      default: 10
 
     - name: fix_penalty
-      title: "Penalty: "
+      title: "Penalty:  (linear scale)"
       type: Number
+      default: 0.1
 
     - name: min_n_neurons
       title: "Min Number of Neurons: "
@@ -204,20 +206,23 @@ options:
     - name: fix_mtry
       title: "Number of Randomly Selected Predictors:"
       type: Integer
+      default: 3
 
     - name: fix_trees
       title: "Number of Trees:"
       type: Number
+      default: 100
 
     - name: fix_min_n
       title: "Number of Minimal Node Size:"
       type: Integer
+      default: 20
 
     - name: min_mtry
       title: "Minimum Number of Randomly Selected Predictors:"
       type: Integer
       min: 2
-      max: 10
+      max: 12
       default: 3
       description:
           R: >
@@ -228,8 +233,8 @@ options:
       title: "Maximum Number of Random Selected Predictors:"
       type: Integer
       min: 2
-      max: 10
-      default: 5
+      max: 12
+      default: 8
       description:
           R: >
             a number between 50 and 99.9 (default: 95) specifying the confidence
@@ -240,7 +245,7 @@ options:
       type: Integer
       min: 50
       max: 300
-      default: 50
+      default: 100
       description:
           R: >
             a number between 50 and 99.9 (default: 95) specifying the confidence
@@ -249,9 +254,9 @@ options:
     - name: max_trees
       title: "Maximum Number of Trees:"
       type: Integer
-      min: 50
-      max: 300
-      default: 150
+      min: 100
+      max: 500
+      default: 300
       description:
           R: >
             a number between 50 and 99.9 (default: 95) specifying the confidence
@@ -261,7 +266,7 @@ options:
       title: "Minimum Minimal Node Size:"
       type: Integer
       min: 2
-      max: 50
+      max: 150
       default: 5
       description:
           R: >
@@ -272,7 +277,7 @@ options:
       title: "Maximum Minimal Node Size:"
       type: Integer
       min: 2
-      max: 50
+      max: 150
       default: 25
       description:
           R: >
@@ -344,32 +349,38 @@ options:
     - name: fix_mtryx
       title: "Number of Randomly Selected Predictors:"
       type: Integer
+      default: 5
 
     - name: fix_treesx
       title: "Number of Trees"
       type: Number
+      default: 100
 
     - name: fix_min_nx
       title: "Number of Minimal Node Size:"
       type: Integer
+      default: 20
 
     - name: fix_tree_depth
       title: "Maximum Tree Depth:"
       type: Integer
+      default: 5
 
     - name: fix_learn_ratex
-      title: "Learning Rate:"
+      title: "Learning Rate:  (linear scale)"
       type: Number
+      default: 0.1
 
     - name: fix_loss_reduction
-      title: "Loss Reduction:"
+      title: "Loss Reduction:  (linear scale)"
       type: Number
+      default: 0.1
 
     - name: min_mtryx
       title: "Minimum Number of Randomly Selected Predictors:"
       type: Integer
       min: 2
-      max: 10
+      max: 12
       default: 3
       description:
           R: >
@@ -380,8 +391,8 @@ options:
       title: "Maximum Number of Random Selected Predictors:"
       type: Integer
       min: 2
-      max: 10
-      default: 5
+      max: 12
+      default: 8
       description:
           R: >
             a number between 50 and 99.9 (default: 95) specifying the confidence
@@ -390,9 +401,9 @@ options:
     - name: min_treesx
       title: "Minimum Number of Trees:"
       type: Integer
-      min: 50
-      max: 300
-      default: 50
+      min: 10
+      max: 500
+      default: 100
       description:
           R: >
             a number between 50 and 99.9 (default: 95) specifying the confidence
@@ -401,9 +412,9 @@ options:
     - name: max_treesx
       title: "Maximum Number of Trees:"
       type: Integer
-      min: 50
-      max: 300
-      default: 150
+      min: 10
+      max: 500
+      default: 300
       description:
           R: >
             a number between 50 and 99.9 (default: 95) specifying the confidence
@@ -413,7 +424,7 @@ options:
       title: "Minimum Minimal Node Size:"
       type: Integer
       min: 2
-      max: 50
+      max: 150
       default: 5
       description:
           R: >
@@ -424,7 +435,7 @@ options:
       title: "Maximum Minimal Node Size:"
       type: Integer
       min: 2
-      max: 50
+      max: 150
       default: 25
       description:
           R: >
@@ -436,7 +447,7 @@ options:
       type: Integer
       min: 2
       max: 50
-      default: 5
+      default: 3
       description:
           R: >
             a number between 50 and 99.9 (default: 95) specifying the confidence
@@ -447,7 +458,7 @@ options:
       type: Integer
       min: 2
       max: 50
-      default: 25
+      default: 8
       description:
           R: >
             a number between 50 and 99.9 (default: 95) specifying the confidence
@@ -457,7 +468,7 @@ options:
       title: "Minimum Learning Rate:  (log10 scale)"
       type: Number
       min: -5
-      max: -1
+      max: -0.5
       default: -3
       description:
           R: >
@@ -467,7 +478,7 @@ options:
       title: "Minimum Learning Rate:  (log10 scale)"
       type: Number
       min: -5
-      max: -1
+      max: -0.5
       default: -1
       description:
           R: >
@@ -477,7 +488,7 @@ options:
       title: "Minimum Loss Reduction:  (log10 scale)"
       type: Number
       min: -5
-      max: -1
+      max: 5
       default: -3
       description:
           R: >
@@ -487,8 +498,8 @@ options:
       title: "Maximum Loss Reduction:  (log10 scale)"
       type: Number
       min: -5
-      max: -1
-      default: -1
+      max: 5
+      default: 1.5
       description:
           R: >
             log10()
@@ -559,31 +570,36 @@ options:
       default: range_scale_factor
 
     - name: fix_cost
-      title: "Cost: "
+      title: "Cost:  (linear scale) "
       type: Number
+      default: 1
 
     - name: fix_margin
       title: "Margin: "
       type: Number
+      default: 0.1
 
     - name: fix_rbf_sigma
-      title: "RBF Variance: "
+      title: "RBF Variance:  (linear scale) "
       type: Number
+      default: 0.01
 
     - name: fix_degree
       title: "Polynomial Degree: "
       type: Number
+      default: 2
 
     - name: fix_scale_factor
-      title: "Scale Factor: "
+      title: "Scale Factor:  (linear scale) "
       type: Number
+      default: 0.1
 
     - name: min_cost
       title: "Minimum Cost:  (log2 scale)"
       type: Number
       min: -10
-      max: 5
-      default: -5
+      max: 10
+      default: -3
       description:
           R: >
             log2()
@@ -592,7 +608,7 @@ options:
       title: "Maximum Cost:  (log2 scale)"
       type: Number
       min: -10
-      max: 5
+      max: 10
       default: 3
       description:
           R: >
@@ -601,9 +617,9 @@ options:
     - name: min_margin
       title: "Minimum Margin: "
       type: Number
-      min: 0.01
-      max: 0.3
-      default: 0.05
+      min: 0.0
+      max: 0.5
+      default: 0.0
       description:
           R: >
             a number between 50 and 99.9 (default: 95) specifying the confidence
@@ -612,8 +628,8 @@ options:
     - name: max_margin
       title: "Maximum Margin: "
       type: Number
-      min: 0.01
-      max: 0.3
+      min: 0.0
+      max: 0.5
       default: 0.2
       description:
           R: >
@@ -623,9 +639,9 @@ options:
     - name: min_rbf_sigma
       title: "Minimum RBF variance:  (log10 scale)"
       type: Number
-      min: -5
-      max: -1
-      default: -3
+      min: -6
+      max: 0
+      default: -5
       description:
           R: >
             log10()
@@ -633,9 +649,9 @@ options:
     - name: max_rbf_sigma
       title: "Maximum RBF variance:  (log10 scale)"
       type: Number
-      min: -5
-      max: -1
-      default: -1
+      min: -6
+      max: 0
+      default: 0
       description:
           R: >
             log10()
@@ -643,9 +659,9 @@ options:
     - name: min_degree
       title: "Minimum Polynomial Degree: "
       type: Integer
-      min: 2
+      min: 1
       max: 5
-      default: 2
+      default: 1
       description:
           R: >
             a number between 50 and 99.9 (default: 95) specifying the confidence
@@ -665,9 +681,9 @@ options:
     - name: min_scale_factor
       title: "Minimum Scale Factor:  (log10 scale) "
       type: Number
-      min: -5
+      min: -6
       max: -1
-      default: -3
+      default: -5
       description:
           R: >
             log10()
@@ -675,7 +691,7 @@ options:
     - name: max_scale_factor
       title: "Maximum Scale Factor:  (log10 scale) "
       type: Number
-      min: -5
+      min: -6
       max: -1
       default: -1
       description:

@@ -17,8 +17,8 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             mode = "neural_network",
             hidden_neurons_tune = "range_neurons",
             penalty_tune = "range_penalty",
-            fix_n_neurons = NULL,
-            fix_penalty = NULL,
+            fix_n_neurons = 10,
+            fix_penalty = 0.1,
             min_n_neurons = 5,
             max_n_neurons = 20,
             min_penalty = -3,
@@ -26,13 +26,13 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             mtry_tune = "range_mtry",
             trees_tune = "range_trees",
             min_n_tune = "range_min_n",
-            fix_mtry = NULL,
-            fix_trees = NULL,
-            fix_min_n = NULL,
+            fix_mtry = 3,
+            fix_trees = 100,
+            fix_min_n = 20,
             min_mtry = 3,
-            max_mtry = 5,
-            min_trees = 50,
-            max_trees = 150,
+            max_mtry = 8,
+            min_trees = 100,
+            max_trees = 300,
             min_min_n = 5,
             max_min_n = 25,
             mtryx_tune = "range_mtryx",
@@ -41,44 +41,40 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             tree_depth_tune = "range_tree_depth",
             learn_ratex_tune = "range_learn_ratex",
             loss_reduction_tune = "range_loss_reduction",
-            fix_mtryx = NULL,
-            fix_treesx = NULL,
-            fix_min_nx = NULL,
-            fix_tree_depth = NULL,
-            fix_learn_ratex = NULL,
-            fix_loss_reduction = NULL,
+            fix_mtryx = 5,
+            fix_treesx = 100,
+            fix_min_nx = 20,
+            fix_tree_depth = 5,
+            fix_learn_ratex = 0.1,
+            fix_loss_reduction = 0.1,
             min_mtryx = 3,
-            max_mtryx = 5,
-            min_treesx = 50,
-            max_treesx = 150,
+            max_mtryx = 8,
+            min_treesx = 100,
+            max_treesx = 300,
             min_min_nx = 5,
             max_min_nx = 25,
-            min_tree_depth = 5,
-            max_tree_depth = 25,
+            min_tree_depth = 3,
+            max_tree_depth = 8,
             min_learn_ratex = -3,
             max_learn_ratex = -1,
             min_loss_reduction = -3,
-            max_loss_reduction = -1,
+            max_loss_reduction = 1.5,
             kernels = NULL,
             cost_tune = "range_cost",
-            margin_tune = "range_margin",
             rbf_sigma_tune = "range_rbf_sigma",
             degree_tune = "range_degree",
             scale_factor_tune = "range_scale_factor",
-            fix_cost = NULL,
-            fix_margin = NULL,
-            fix_rbf_sigma = NULL,
-            fix_degree = NULL,
-            fix_scale_factor = NULL,
-            min_cost = -5,
+            fix_cost = 1,
+            fix_rbf_sigma = 0.01,
+            fix_degree = 2,
+            fix_scale_factor = 0.1,
+            min_cost = -3,
             max_cost = 3,
-            min_margin = 0.05,
-            max_margin = 0.2,
-            min_rbf_sigma = -3,
-            max_rbf_sigma = -1,
-            min_degree = 2,
+            min_rbf_sigma = -5,
+            max_rbf_sigma = 0,
+            min_degree = 1,
             max_degree = 3,
-            min_scale_factor = -3,
+            min_scale_factor = -5,
             max_scale_factor = -1,
             tuners = "none",
             metrics = "accuracy",
@@ -187,10 +183,12 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
                 default="range_penalty")
             private$..fix_n_neurons <- jmvcore::OptionInteger$new(
                 "fix_n_neurons",
-                fix_n_neurons)
+                fix_n_neurons,
+                default=10)
             private$..fix_penalty <- jmvcore::OptionNumber$new(
                 "fix_penalty",
-                fix_penalty)
+                fix_penalty,
+                default=0.1)
             private$..min_n_neurons <- jmvcore::OptionInteger$new(
                 "min_n_neurons",
                 min_n_neurons,
@@ -238,48 +236,51 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
                 default="range_min_n")
             private$..fix_mtry <- jmvcore::OptionInteger$new(
                 "fix_mtry",
-                fix_mtry)
+                fix_mtry,
+                default=3)
             private$..fix_trees <- jmvcore::OptionNumber$new(
                 "fix_trees",
-                fix_trees)
+                fix_trees,
+                default=100)
             private$..fix_min_n <- jmvcore::OptionInteger$new(
                 "fix_min_n",
-                fix_min_n)
+                fix_min_n,
+                default=20)
             private$..min_mtry <- jmvcore::OptionInteger$new(
                 "min_mtry",
                 min_mtry,
                 min=2,
-                max=10,
+                max=12,
                 default=3)
             private$..max_mtry <- jmvcore::OptionInteger$new(
                 "max_mtry",
                 max_mtry,
                 min=2,
-                max=10,
-                default=5)
+                max=12,
+                default=8)
             private$..min_trees <- jmvcore::OptionInteger$new(
                 "min_trees",
                 min_trees,
                 min=50,
                 max=300,
-                default=50)
+                default=100)
             private$..max_trees <- jmvcore::OptionInteger$new(
                 "max_trees",
                 max_trees,
-                min=50,
-                max=300,
-                default=150)
+                min=100,
+                max=500,
+                default=300)
             private$..min_min_n <- jmvcore::OptionInteger$new(
                 "min_min_n",
                 min_min_n,
                 min=2,
-                max=50,
+                max=150,
                 default=5)
             private$..max_min_n <- jmvcore::OptionInteger$new(
                 "max_min_n",
                 max_min_n,
                 min=2,
-                max=50,
+                max=150,
                 default=25)
             private$..mtryx_tune <- jmvcore::OptionList$new(
                 "mtryx_tune",
@@ -325,94 +326,100 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
                 default="range_loss_reduction")
             private$..fix_mtryx <- jmvcore::OptionInteger$new(
                 "fix_mtryx",
-                fix_mtryx)
+                fix_mtryx,
+                default=5)
             private$..fix_treesx <- jmvcore::OptionNumber$new(
                 "fix_treesx",
-                fix_treesx)
+                fix_treesx,
+                default=100)
             private$..fix_min_nx <- jmvcore::OptionInteger$new(
                 "fix_min_nx",
-                fix_min_nx)
+                fix_min_nx,
+                default=20)
             private$..fix_tree_depth <- jmvcore::OptionInteger$new(
                 "fix_tree_depth",
-                fix_tree_depth)
+                fix_tree_depth,
+                default=5)
             private$..fix_learn_ratex <- jmvcore::OptionNumber$new(
                 "fix_learn_ratex",
-                fix_learn_ratex)
+                fix_learn_ratex,
+                default=0.1)
             private$..fix_loss_reduction <- jmvcore::OptionNumber$new(
                 "fix_loss_reduction",
-                fix_loss_reduction)
+                fix_loss_reduction,
+                default=0.1)
             private$..min_mtryx <- jmvcore::OptionInteger$new(
                 "min_mtryx",
                 min_mtryx,
                 min=2,
-                max=10,
+                max=12,
                 default=3)
             private$..max_mtryx <- jmvcore::OptionInteger$new(
                 "max_mtryx",
                 max_mtryx,
                 min=2,
-                max=10,
-                default=5)
+                max=12,
+                default=8)
             private$..min_treesx <- jmvcore::OptionInteger$new(
                 "min_treesx",
                 min_treesx,
-                min=50,
-                max=300,
-                default=50)
+                min=10,
+                max=500,
+                default=100)
             private$..max_treesx <- jmvcore::OptionInteger$new(
                 "max_treesx",
                 max_treesx,
-                min=50,
-                max=300,
-                default=150)
+                min=10,
+                max=500,
+                default=300)
             private$..min_min_nx <- jmvcore::OptionInteger$new(
                 "min_min_nx",
                 min_min_nx,
                 min=2,
-                max=50,
+                max=150,
                 default=5)
             private$..max_min_nx <- jmvcore::OptionInteger$new(
                 "max_min_nx",
                 max_min_nx,
                 min=2,
-                max=50,
+                max=150,
                 default=25)
             private$..min_tree_depth <- jmvcore::OptionInteger$new(
                 "min_tree_depth",
                 min_tree_depth,
                 min=2,
                 max=50,
-                default=5)
+                default=3)
             private$..max_tree_depth <- jmvcore::OptionInteger$new(
                 "max_tree_depth",
                 max_tree_depth,
                 min=2,
                 max=50,
-                default=25)
+                default=8)
             private$..min_learn_ratex <- jmvcore::OptionNumber$new(
                 "min_learn_ratex",
                 min_learn_ratex,
                 min=-5,
-                max=-1,
+                max=-0.5,
                 default=-3)
             private$..max_learn_ratex <- jmvcore::OptionNumber$new(
                 "max_learn_ratex",
                 max_learn_ratex,
                 min=-5,
-                max=-1,
+                max=-0.5,
                 default=-1)
             private$..min_loss_reduction <- jmvcore::OptionNumber$new(
                 "min_loss_reduction",
                 min_loss_reduction,
                 min=-5,
-                max=-1,
+                max=5,
                 default=-3)
             private$..max_loss_reduction <- jmvcore::OptionNumber$new(
                 "max_loss_reduction",
                 max_loss_reduction,
                 min=-5,
-                max=-1,
-                default=-1)
+                max=5,
+                default=1.5)
             private$..kernels <- jmvcore::OptionList$new(
                 "kernels",
                 kernels,
@@ -427,13 +434,6 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "fix_cost",
                     "range_cost"),
                 default="range_cost")
-            private$..margin_tune <- jmvcore::OptionList$new(
-                "margin_tune",
-                margin_tune,
-                options=list(
-                    "fix_margin",
-                    "range_margin"),
-                default="range_margin")
             private$..rbf_sigma_tune <- jmvcore::OptionList$new(
                 "rbf_sigma_tune",
                 rbf_sigma_tune,
@@ -457,61 +457,50 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
                 default="range_scale_factor")
             private$..fix_cost <- jmvcore::OptionNumber$new(
                 "fix_cost",
-                fix_cost)
-            private$..fix_margin <- jmvcore::OptionNumber$new(
-                "fix_margin",
-                fix_margin)
+                fix_cost,
+                default=1)
             private$..fix_rbf_sigma <- jmvcore::OptionNumber$new(
                 "fix_rbf_sigma",
-                fix_rbf_sigma)
+                fix_rbf_sigma,
+                default=0.01)
             private$..fix_degree <- jmvcore::OptionNumber$new(
                 "fix_degree",
-                fix_degree)
+                fix_degree,
+                default=2)
             private$..fix_scale_factor <- jmvcore::OptionNumber$new(
                 "fix_scale_factor",
-                fix_scale_factor)
+                fix_scale_factor,
+                default=0.1)
             private$..min_cost <- jmvcore::OptionNumber$new(
                 "min_cost",
                 min_cost,
                 min=-10,
-                max=5,
-                default=-5)
+                max=10,
+                default=-3)
             private$..max_cost <- jmvcore::OptionNumber$new(
                 "max_cost",
                 max_cost,
                 min=-10,
-                max=5,
+                max=10,
                 default=3)
-            private$..min_margin <- jmvcore::OptionNumber$new(
-                "min_margin",
-                min_margin,
-                min=0.01,
-                max=0.3,
-                default=0.05)
-            private$..max_margin <- jmvcore::OptionNumber$new(
-                "max_margin",
-                max_margin,
-                min=0.01,
-                max=0.3,
-                default=0.2)
             private$..min_rbf_sigma <- jmvcore::OptionNumber$new(
                 "min_rbf_sigma",
                 min_rbf_sigma,
-                min=-5,
-                max=-1,
-                default=-3)
+                min=-6,
+                max=0,
+                default=-5)
             private$..max_rbf_sigma <- jmvcore::OptionNumber$new(
                 "max_rbf_sigma",
                 max_rbf_sigma,
-                min=-5,
-                max=-1,
-                default=-1)
+                min=-6,
+                max=0,
+                default=0)
             private$..min_degree <- jmvcore::OptionInteger$new(
                 "min_degree",
                 min_degree,
-                min=2,
+                min=1,
                 max=5,
-                default=2)
+                default=1)
             private$..max_degree <- jmvcore::OptionInteger$new(
                 "max_degree",
                 max_degree,
@@ -521,13 +510,13 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             private$..min_scale_factor <- jmvcore::OptionNumber$new(
                 "min_scale_factor",
                 min_scale_factor,
-                min=-5,
+                min=-6,
                 max=-1,
-                default=-3)
+                default=-5)
             private$..max_scale_factor <- jmvcore::OptionNumber$new(
                 "max_scale_factor",
                 max_scale_factor,
-                min=-5,
+                min=-6,
                 max=-1,
                 default=-1)
             private$..tuners <- jmvcore::OptionList$new(
@@ -731,19 +720,15 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             self$.addOption(private$..max_loss_reduction)
             self$.addOption(private$..kernels)
             self$.addOption(private$..cost_tune)
-            self$.addOption(private$..margin_tune)
             self$.addOption(private$..rbf_sigma_tune)
             self$.addOption(private$..degree_tune)
             self$.addOption(private$..scale_factor_tune)
             self$.addOption(private$..fix_cost)
-            self$.addOption(private$..fix_margin)
             self$.addOption(private$..fix_rbf_sigma)
             self$.addOption(private$..fix_degree)
             self$.addOption(private$..fix_scale_factor)
             self$.addOption(private$..min_cost)
             self$.addOption(private$..max_cost)
-            self$.addOption(private$..min_margin)
-            self$.addOption(private$..max_margin)
             self$.addOption(private$..min_rbf_sigma)
             self$.addOption(private$..max_rbf_sigma)
             self$.addOption(private$..min_degree)
@@ -840,19 +825,15 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
         max_loss_reduction = function() private$..max_loss_reduction$value,
         kernels = function() private$..kernels$value,
         cost_tune = function() private$..cost_tune$value,
-        margin_tune = function() private$..margin_tune$value,
         rbf_sigma_tune = function() private$..rbf_sigma_tune$value,
         degree_tune = function() private$..degree_tune$value,
         scale_factor_tune = function() private$..scale_factor_tune$value,
         fix_cost = function() private$..fix_cost$value,
-        fix_margin = function() private$..fix_margin$value,
         fix_rbf_sigma = function() private$..fix_rbf_sigma$value,
         fix_degree = function() private$..fix_degree$value,
         fix_scale_factor = function() private$..fix_scale_factor$value,
         min_cost = function() private$..min_cost$value,
         max_cost = function() private$..max_cost$value,
-        min_margin = function() private$..min_margin$value,
-        max_margin = function() private$..max_margin$value,
         min_rbf_sigma = function() private$..min_rbf_sigma$value,
         max_rbf_sigma = function() private$..max_rbf_sigma$value,
         min_degree = function() private$..min_degree$value,
@@ -948,19 +929,15 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
         ..max_loss_reduction = NA,
         ..kernels = NA,
         ..cost_tune = NA,
-        ..margin_tune = NA,
         ..rbf_sigma_tune = NA,
         ..degree_tune = NA,
         ..scale_factor_tune = NA,
         ..fix_cost = NA,
-        ..fix_margin = NA,
         ..fix_rbf_sigma = NA,
         ..fix_degree = NA,
         ..fix_scale_factor = NA,
         ..min_cost = NA,
         ..max_cost = NA,
-        ..min_margin = NA,
-        ..max_margin = NA,
         ..min_rbf_sigma = NA,
         ..max_rbf_sigma = NA,
         ..min_degree = NA,
@@ -1101,10 +1078,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "fix_cost",
                     "min_cost",
                     "max_cost",
-                    "margin_tune",
-                    "fix_margin",
-                    "min_margin",
-                    "max_margin",
                     "rbf_sigma_tune",
                     "fix_rbf_sigma",
                     "min_rbf_sigma",
@@ -1186,10 +1159,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "fix_cost",
                     "min_cost",
                     "max_cost",
-                    "margin_tune",
-                    "fix_margin",
-                    "min_margin",
-                    "max_margin",
                     "rbf_sigma_tune",
                     "fix_rbf_sigma",
                     "min_rbf_sigma",
@@ -1278,10 +1247,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "fix_cost",
                         "min_cost",
                         "max_cost",
-                        "margin_tune",
-                        "fix_margin",
-                        "min_margin",
-                        "max_margin",
                         "rbf_sigma_tune",
                         "fix_rbf_sigma",
                         "min_rbf_sigma",
@@ -1371,10 +1336,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "fix_cost",
                         "min_cost",
                         "max_cost",
-                        "margin_tune",
-                        "fix_margin",
-                        "min_margin",
-                        "max_margin",
                         "rbf_sigma_tune",
                         "fix_rbf_sigma",
                         "min_rbf_sigma",
@@ -1457,10 +1418,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "fix_cost",
                         "min_cost",
                         "max_cost",
-                        "margin_tune",
-                        "fix_margin",
-                        "min_margin",
-                        "max_margin",
                         "rbf_sigma_tune",
                         "fix_rbf_sigma",
                         "min_rbf_sigma",
@@ -1543,10 +1500,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "fix_cost",
                         "min_cost",
                         "max_cost",
-                        "margin_tune",
-                        "fix_margin",
-                        "min_margin",
-                        "max_margin",
                         "rbf_sigma_tune",
                         "fix_rbf_sigma",
                         "min_rbf_sigma",
@@ -1629,10 +1582,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "fix_cost",
                         "min_cost",
                         "max_cost",
-                        "margin_tune",
-                        "fix_margin",
-                        "min_margin",
-                        "max_margin",
                         "rbf_sigma_tune",
                         "fix_rbf_sigma",
                         "min_rbf_sigma",
@@ -1715,10 +1664,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "fix_cost",
                         "min_cost",
                         "max_cost",
-                        "margin_tune",
-                        "fix_margin",
-                        "min_margin",
-                        "max_margin",
                         "rbf_sigma_tune",
                         "fix_rbf_sigma",
                         "min_rbf_sigma",
@@ -1798,10 +1743,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "fix_cost",
                         "min_cost",
                         "max_cost",
-                        "margin_tune",
-                        "fix_margin",
-                        "min_margin",
-                        "max_margin",
                         "rbf_sigma_tune",
                         "fix_rbf_sigma",
                         "min_rbf_sigma",
@@ -1886,10 +1827,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "fix_cost",
                         "min_cost",
                         "max_cost",
-                        "margin_tune",
-                        "fix_margin",
-                        "min_margin",
-                        "max_margin",
                         "rbf_sigma_tune",
                         "fix_rbf_sigma",
                         "min_rbf_sigma",
@@ -1974,10 +1911,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         "fix_cost",
                         "min_cost",
                         "max_cost",
-                        "margin_tune",
-                        "fix_margin",
-                        "min_margin",
-                        "max_margin",
                         "rbf_sigma_tune",
                         "fix_rbf_sigma",
                         "min_rbf_sigma",
@@ -2062,10 +1995,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "fix_cost",
                     "min_cost",
                     "max_cost",
-                    "margin_tune",
-                    "fix_margin",
-                    "min_margin",
-                    "max_margin",
                     "rbf_sigma_tune",
                     "fix_rbf_sigma",
                     "min_rbf_sigma",
@@ -2145,10 +2074,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "fix_cost",
                     "min_cost",
                     "max_cost",
-                    "margin_tune",
-                    "fix_margin",
-                    "min_margin",
-                    "max_margin",
                     "rbf_sigma_tune",
                     "fix_rbf_sigma",
                     "min_rbf_sigma",
@@ -2228,10 +2153,6 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "fix_cost",
                     "min_cost",
                     "max_cost",
-                    "margin_tune",
-                    "fix_margin",
-                    "min_margin",
-                    "max_margin",
                     "rbf_sigma_tune",
                     "fix_rbf_sigma",
                     "min_rbf_sigma",
@@ -2346,21 +2267,15 @@ MulticlassClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
 #' @param max_loss_reduction log10()
 #' @param kernels .
 #' @param cost_tune .
-#' @param margin_tune .
 #' @param rbf_sigma_tune .
 #' @param degree_tune .
 #' @param scale_factor_tune .
 #' @param fix_cost .
-#' @param fix_margin .
 #' @param fix_rbf_sigma .
 #' @param fix_degree .
 #' @param fix_scale_factor .
 #' @param min_cost log2()
 #' @param max_cost log2()
-#' @param min_margin a number between 50 and 99.9 (default: 95) specifying the
-#'   confidence interval width
-#' @param max_margin a number between 50 and 99.9 (default: 95) specifying the
-#'   confidence interval width
 #' @param min_rbf_sigma log10()
 #' @param max_rbf_sigma log10()
 #' @param min_degree a number between 50 and 99.9 (default: 95) specifying the
@@ -2439,8 +2354,8 @@ MulticlassClassification <- function(
     mode = "neural_network",
     hidden_neurons_tune = "range_neurons",
     penalty_tune = "range_penalty",
-    fix_n_neurons,
-    fix_penalty,
+    fix_n_neurons = 10,
+    fix_penalty = 0.1,
     min_n_neurons = 5,
     max_n_neurons = 20,
     min_penalty = -3,
@@ -2448,13 +2363,13 @@ MulticlassClassification <- function(
     mtry_tune = "range_mtry",
     trees_tune = "range_trees",
     min_n_tune = "range_min_n",
-    fix_mtry,
-    fix_trees,
-    fix_min_n,
+    fix_mtry = 3,
+    fix_trees = 100,
+    fix_min_n = 20,
     min_mtry = 3,
-    max_mtry = 5,
-    min_trees = 50,
-    max_trees = 150,
+    max_mtry = 8,
+    min_trees = 100,
+    max_trees = 300,
     min_min_n = 5,
     max_min_n = 25,
     mtryx_tune = "range_mtryx",
@@ -2463,44 +2378,40 @@ MulticlassClassification <- function(
     tree_depth_tune = "range_tree_depth",
     learn_ratex_tune = "range_learn_ratex",
     loss_reduction_tune = "range_loss_reduction",
-    fix_mtryx,
-    fix_treesx,
-    fix_min_nx,
-    fix_tree_depth,
-    fix_learn_ratex,
-    fix_loss_reduction,
+    fix_mtryx = 5,
+    fix_treesx = 100,
+    fix_min_nx = 20,
+    fix_tree_depth = 5,
+    fix_learn_ratex = 0.1,
+    fix_loss_reduction = 0.1,
     min_mtryx = 3,
-    max_mtryx = 5,
-    min_treesx = 50,
-    max_treesx = 150,
+    max_mtryx = 8,
+    min_treesx = 100,
+    max_treesx = 300,
     min_min_nx = 5,
     max_min_nx = 25,
-    min_tree_depth = 5,
-    max_tree_depth = 25,
+    min_tree_depth = 3,
+    max_tree_depth = 8,
     min_learn_ratex = -3,
     max_learn_ratex = -1,
     min_loss_reduction = -3,
-    max_loss_reduction = -1,
+    max_loss_reduction = 1.5,
     kernels,
     cost_tune = "range_cost",
-    margin_tune = "range_margin",
     rbf_sigma_tune = "range_rbf_sigma",
     degree_tune = "range_degree",
     scale_factor_tune = "range_scale_factor",
-    fix_cost,
-    fix_margin,
-    fix_rbf_sigma,
-    fix_degree,
-    fix_scale_factor,
-    min_cost = -5,
+    fix_cost = 1,
+    fix_rbf_sigma = 0.01,
+    fix_degree = 2,
+    fix_scale_factor = 0.1,
+    min_cost = -3,
     max_cost = 3,
-    min_margin = 0.05,
-    max_margin = 0.2,
-    min_rbf_sigma = -3,
-    max_rbf_sigma = -1,
-    min_degree = 2,
+    min_rbf_sigma = -5,
+    max_rbf_sigma = 0,
+    min_degree = 1,
     max_degree = 3,
-    min_scale_factor = -3,
+    min_scale_factor = -5,
     max_scale_factor = -1,
     tuners = "none",
     metrics = "accuracy",
@@ -2609,19 +2520,15 @@ MulticlassClassification <- function(
         max_loss_reduction = max_loss_reduction,
         kernels = kernels,
         cost_tune = cost_tune,
-        margin_tune = margin_tune,
         rbf_sigma_tune = rbf_sigma_tune,
         degree_tune = degree_tune,
         scale_factor_tune = scale_factor_tune,
         fix_cost = fix_cost,
-        fix_margin = fix_margin,
         fix_rbf_sigma = fix_rbf_sigma,
         fix_degree = fix_degree,
         fix_scale_factor = fix_scale_factor,
         min_cost = min_cost,
         max_cost = max_cost,
-        min_margin = min_margin,
-        max_margin = max_margin,
         min_rbf_sigma = min_rbf_sigma,
         max_rbf_sigma = max_rbf_sigma,
         min_degree = min_degree,

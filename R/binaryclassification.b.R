@@ -275,9 +275,59 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
         },
 
+        .setInfo = function(){
+
+            if (self$options$mode == "neural_network"){
+
+                model_name = "Neural Network"
+
+            }
+
+            else if (self$options$mode == "random_forest"){
+
+                model_name = "Random Forest"
+
+            }
+
+            else if (self$options$mode == "xgboost"){
+
+                model_name = "XGBoost"
+            }
+
+            else {
+
+                if (self$options$kernels == "linear"){
+
+                    model_name = "Support Vector Machine (Linear Kernel)"
+
+                } else if (self$options$kernels == "rbf"){
+
+                    model_name = "Support Vector Machine (RBF Kernel)"
+
+                } else{
+
+                    model_name = "Support Vector Machine (Polynomial Kernel)"
+
+                }
+
+            }
+
+            content = glue::glue("
+
+                                    Model: {model_name}
+
+                                    Random Seed: {self$options$seed}"
+            )
+
+            self$results$text$setContent(content)
+
+        },
+
         ## Run
 
         .run = function(){
+
+            private$.setInfo()
 
             set.seed(self$options$seed)
 
@@ -465,11 +515,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ######### hidden_units ###########
 
-                if (self$options$hidden_neurons_tune == "none"){
-
-                    hidden_units = NULL
-
-                } else if (self$options$hidden_neurons_tune == "fix_neurons"){
+                if (self$options$hidden_neurons_tune == "fix_neurons"){
 
                     hidden_units = self$options$fix_n_neurons
 
@@ -481,11 +527,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ######### penalty ###########
 
-                if (self$options$penalty_tune == "none"){
-
-                    penalty = NULL
-
-                } else if (self$options$penalty_tune == "fix_penalty"){
+                if (self$options$penalty_tune == "fix_penalty"){
 
                     penalty = self$options$fix_penalty
 
@@ -494,8 +536,6 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
                     penalty = c(self$options$min_penalty, self$options$max_penalty)
 
                 }
-
-                ######### activation ###########
 
                 hyp_list = list(
                     hidden_units = hidden_units,
@@ -509,11 +549,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ##### mtry ######
 
-                if (self$options$mtry_tune == "none"){
-
-                    mtry = NULL
-
-                } else if (self$options$mtry_tune == "fix_mtry"){
+                if (self$options$mtry_tune == "fix_mtry"){
 
                     mtry = self$options$fix_mtry
 
@@ -525,11 +561,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ##### trees ######
 
-                if (self$options$trees_tune == "none"){
-
-                    trees = NULL
-
-                } else if (self$options$trees_tune == "fix_trees"){
+                if (self$options$trees_tune == "fix_trees"){
 
                     trees = self$options$fix_trees
 
@@ -541,11 +573,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ##### min_n ######
 
-                if (self$options$min_n_tune == "none"){
-
-                    min_n = NULL
-
-                } else if (self$options$min_n_tune == "fix_min_n"){
+                if (self$options$min_n_tune == "fix_min_n"){
 
                     min_n = self$options$fix_min_n
 
@@ -568,11 +596,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ##### mtry ######
 
-                if (self$options$mtryx_tune == "none"){
-
-                    mtry = NULL
-
-                } else if (self$options$mtryx_tune == "fix_mtryx"){
+                if (self$options$mtryx_tune == "fix_mtryx"){
 
                     mtry = self$options$fix_mtryx
 
@@ -584,11 +608,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ##### trees ######
 
-                if (self$options$treesx_tune == "none"){
-
-                    trees = NULL
-
-                } else if (self$options$treesx_tune == "fix_treesx"){
+                if (self$options$treesx_tune == "fix_treesx"){
 
                     trees = self$options$fix_treesx
 
@@ -600,11 +620,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ##### min_n ######
 
-                if (self$options$min_nx_tune == "none"){
-
-                    min_n = NULL
-
-                } else if (self$options$min_nx_tune == "fix_min_nx"){
+                if (self$options$min_nx_tune == "fix_min_nx"){
 
                     min_n = self$options$fix_min_nx
 
@@ -616,11 +632,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ##### tree_depth #######
 
-                if (self$options$tree_depth_tune == "none"){
-
-                    tree_depth = NULL
-
-                } else if (self$options$tree_depth_tune == "fix_tree_depth"){
+                if (self$options$tree_depth_tune == "fix_tree_depth"){
 
                     tree_depth = self$options$fix_tree_depth
 
@@ -632,11 +644,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ##### learn_rate #######
 
-                if (self$options$learn_ratex_tune == "none"){
-
-                    learn_rate = NULL
-
-                } else if (self$options$learn_ratex_tune == "fix_learn_ratex"){
+                if (self$options$learn_ratex_tune == "fix_learn_ratex"){
 
                     learn_rate = self$options$fix_learn_ratex
 
@@ -648,11 +656,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ##### loss_reduction ######
 
-                if (self$options$loss_reduction_tune == "none"){
-
-                    loss_reduction = NULL
-
-                } else if (self$options$loss_reduction_tune == "fix_loss_reduction"){
+                if (self$options$loss_reduction_tune == "fix_loss_reduction"){
 
                     loss_reduction = self$options$fix_loss_reduction
 
@@ -678,11 +682,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 ##### cost #####
 
-                if (self$options$cost_tune == "none"){
-
-                    cost = NULL
-
-                } else if (self$options$cost_tune == "fix_cost"){
+                if (self$options$cost_tune == "fix_cost"){
 
                     cost = self$options$fix_cost
 
@@ -692,29 +692,9 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 }
 
-                #### margin #####
-
-                if (self$options$margin_tune == "none"){
-
-                    margin = NULL
-
-                } else if (self$options$margin_tune == "fix_margin"){
-
-                    margin = self$options$fix_margin
-
-                } else {
-
-                    margin = c(self$options$min_margin, self$options$max_margin)
-
-                }
-
                 #### rbf_sigma #####
 
-                if (self$options$rbf_sigma_tune == "none"){
-
-                    rbf_sigma = NULL
-
-                } else if (self$options$rbf_sigma_tune == "fix_rbf_sigma"){
+                if (self$options$rbf_sigma_tune == "fix_rbf_sigma"){
 
                     rbf_sigma = self$options$fix_rbf_sigma
 
@@ -726,27 +706,21 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 #### degree ######
 
-                if (self$options$degree_tune == "none"){
-
-                    degree = NULL
-
-                } else if (self$options$degree_tune == "fix_degree"){
+                if (self$options$degree_tune == "fix_degree"){
 
                     degree = self$options$fix_degree
 
                 } else {
 
-                    degree = c(self$options$min_degree, self$options$max_degree)
+                    degree = c(as.numeric(self$options$min_degree),
+                               as.numeric(self$options$max_degree)
+                    )
 
                 }
 
                 #### scale_factor #####
 
-                if (self$options$scale_factor_tune == "none"){
-
-                    scale_factor = NULL
-
-                } else if (self$options$scale_factor_tune == "fix_scale_factor"){
+                if (self$options$scale_factor_tune == "fix_scale_factor"){
 
                     scale_factor = self$options$fix_scale_factor
 
@@ -764,8 +738,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                     hyp_list = list(
                         type = type,
-                        cost = cost,
-                        margin = margin
+                        cost = cost
                     )
 
                 } else if (self$options$kernels == "rbf"){
@@ -775,7 +748,6 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
                     hyp_list = list(
                         type = type,
                         cost = cost,
-                        margin = margin,
                         rbf_sigma = rbf_sigma
                     )
 
@@ -786,7 +758,6 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
                     hyp_list = list(
                         type = type,
                         cost = cost,
-                        margin = margin,
                         degree = degree,
                         scale_factor = scale_factor
                     )
