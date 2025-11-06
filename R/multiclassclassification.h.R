@@ -100,12 +100,15 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             plot_lift_curve = FALSE,
             plot_dist_by_class = FALSE,
             plot_confusion_matrix = FALSE,
+            one_v_rest = FALSE,
             pfi = FALSE,
             shap_mean = FALSE,
             shap_dir = FALSE,
             shap_box = FALSE,
             shap_swarm = FALSE,
-            olden = FALSE, ...) {
+            olden = FALSE,
+            show_shap = TRUE,
+            show_olden = TRUE, ...) {
 
             super$initialize(
                 package="EasyML",
@@ -541,7 +544,7 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
                     "mcc",
                     "j_index",
                     "detection_prevalence",
-                    "auc_roc",
+                    "roc_auc",
                     "pr_auc",
                     "gain_capture",
                     "brier_score"),
@@ -634,6 +637,10 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
                 "plot_confusion_matrix",
                 plot_confusion_matrix,
                 default=FALSE)
+            private$..one_v_rest <- jmvcore::OptionBool$new(
+                "one_v_rest",
+                one_v_rest,
+                default=FALSE)
             private$..pfi <- jmvcore::OptionBool$new(
                 "pfi",
                 pfi,
@@ -658,6 +665,16 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
                 "olden",
                 olden,
                 default=FALSE)
+            private$..show_shap <- jmvcore::OptionBool$new(
+                "show_shap",
+                show_shap,
+                hidden=TRUE,
+                default=TRUE)
+            private$..show_olden <- jmvcore::OptionBool$new(
+                "show_olden",
+                show_olden,
+                hidden=TRUE,
+                default=TRUE)
             private$..pred_class <- jmvcore::OptionOutput$new(
                 "pred_class")
             private$..pred_prob <- jmvcore::OptionOutput$new(
@@ -759,12 +776,15 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             self$.addOption(private$..plot_lift_curve)
             self$.addOption(private$..plot_dist_by_class)
             self$.addOption(private$..plot_confusion_matrix)
+            self$.addOption(private$..one_v_rest)
             self$.addOption(private$..pfi)
             self$.addOption(private$..shap_mean)
             self$.addOption(private$..shap_dir)
             self$.addOption(private$..shap_box)
             self$.addOption(private$..shap_swarm)
             self$.addOption(private$..olden)
+            self$.addOption(private$..show_shap)
+            self$.addOption(private$..show_olden)
             self$.addOption(private$..pred_class)
             self$.addOption(private$..pred_prob)
             self$.addOption(private$..dataset_id)
@@ -864,12 +884,15 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
         plot_lift_curve = function() private$..plot_lift_curve$value,
         plot_dist_by_class = function() private$..plot_dist_by_class$value,
         plot_confusion_matrix = function() private$..plot_confusion_matrix$value,
+        one_v_rest = function() private$..one_v_rest$value,
         pfi = function() private$..pfi$value,
         shap_mean = function() private$..shap_mean$value,
         shap_dir = function() private$..shap_dir$value,
         shap_box = function() private$..shap_box$value,
         shap_swarm = function() private$..shap_swarm$value,
         olden = function() private$..olden$value,
+        show_shap = function() private$..show_shap$value,
+        show_olden = function() private$..show_olden$value,
         pred_class = function() private$..pred_class$value,
         pred_prob = function() private$..pred_prob$value,
         dataset_id = function() private$..dataset_id$value),
@@ -968,12 +991,15 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
         ..plot_lift_curve = NA,
         ..plot_dist_by_class = NA,
         ..plot_confusion_matrix = NA,
+        ..one_v_rest = NA,
         ..pfi = NA,
         ..shap_mean = NA,
         ..shap_dir = NA,
         ..shap_box = NA,
         ..shap_swarm = NA,
         ..olden = NA,
+        ..show_shap = NA,
+        ..show_olden = NA,
         ..pred_class = NA,
         ..pred_prob = NA,
         ..dataset_id = NA)
@@ -984,6 +1010,7 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
     inherit = jmvcore::Group,
     active = list(
         text = function() private$.items[["text"]],
+        summary = function() private$.items[["summary"]],
         summary_train = function() private$.items[["summary_train"]],
         summary_test = function() private$.items[["summary_test"]],
         model = function() private$..model,
@@ -1009,15 +1036,99 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                 title="Multiclass Classification",
                 refs=list(
                     "EasyML",
-                    "MLwrap"))
+                    "MLwrap",
+                    "MLwrap_tutorial"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
                 title="Multiclass Classification"))
             self$add(jmvcore::Table$new(
                 options=options,
+                name="summary",
+                title="Summary Results (Macro-Weighted)",
+                rows=2,
+                columns=list(
+                    list(
+                        `name`="Dataset", 
+                        `title`="Dataset", 
+                        `type`="text")),
+                clearWith=list(
+                    "seed",
+                    "dep",
+                    "dep_level",
+                    "covs",
+                    "factors",
+                    "stdCovs",
+                    "encCat",
+                    "mode",
+                    "metrics",
+                    "tuners",
+                    "hidden_neurons_tune",
+                    "fix_n_neurons",
+                    "min_n_neurons",
+                    "max_n_neurons",
+                    "penalty_tune",
+                    "fix_penalty",
+                    "min_penalty",
+                    "max_penalty",
+                    "mtry_tune",
+                    "fix_mtry",
+                    "min_mtry",
+                    "max_mtry",
+                    "trees_tune",
+                    "fix_trees",
+                    "min_trees",
+                    "max_trees",
+                    "min_n_tune",
+                    "fix_min_n",
+                    "min_min_n",
+                    "max_min_n",
+                    "mtryx_tune",
+                    "fix_mtryx",
+                    "min_mtryx",
+                    "max_mtryx",
+                    "treesx_tune",
+                    "fix_treesx",
+                    "min_treesx",
+                    "max_treesx",
+                    "min_nx_tune",
+                    "fix_min_nx",
+                    "min_min_nx",
+                    "max_min_nx",
+                    "tree_depth_tune",
+                    "fix_tree_depth",
+                    "min_tree_depth",
+                    "max_tree_depth",
+                    "learn_ratex_tune",
+                    "fix_learn_ratex",
+                    "min_learn_ratex",
+                    "max_learn_ratex",
+                    "loss_reduction_tune",
+                    "fix_loss_reduction",
+                    "min_loss_reduction",
+                    "max_loss_reduction",
+                    "kernels",
+                    "cost_tune",
+                    "fix_cost",
+                    "min_cost",
+                    "max_cost",
+                    "rbf_sigma_tune",
+                    "fix_rbf_sigma",
+                    "min_rbf_sigma",
+                    "max_rbf_sigma",
+                    "degree_tune",
+                    "fix_degree",
+                    "min_degree",
+                    "max_degree",
+                    "scale_factor_tune",
+                    "fix_scale_factor",
+                    "min_scale_factor",
+                    "max_scale_factor")))
+            self$add(jmvcore::Table$new(
+                options=options,
                 name="summary_train",
-                title="Summary Train Results",
+                title="Summary Train Results (One vs Rest)",
+                visible="(one_v_rest)",
                 clearWith=list(
                     "seed",
                     "dep",
@@ -1098,7 +1209,8 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
             self$add(jmvcore::Table$new(
                 options=options,
                 name="summary_test",
-                title="Summary Test Results",
+                title="Summary Test Results (One vs Rest)",
+                visible="(one_v_rest)",
                 clearWith=list(
                     "seed",
                     "dep",
@@ -1268,6 +1380,10 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     title="$key",
                     rows=1,
                     columns=list(
+                        list(
+                            `name`="metric", 
+                            `title`="Metric", 
+                            `type`="text"),
                         list(
                             `name`="estimate", 
                             `title`="Estimate", 
@@ -2195,9 +2311,9 @@ MulticlassClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
 #' explanatory variables. Other statistical methods, such as ANOVA and ANCOVA, 
 #' are in reality just forms of linear regression.
 #' 
+#' @param data .
 #' @param disable .
 #' @param seed .
-#' @param data the data as a data frame
 #' @param dep the fixed factors from \code{data}
 #' @param covs the covariates from \code{data}
 #' @param factors the fixed factors from \code{data}
@@ -2308,15 +2424,19 @@ MulticlassClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
 #' @param plot_lift_curve .
 #' @param plot_dist_by_class .
 #' @param plot_confusion_matrix .
+#' @param one_v_rest .
 #' @param pfi .
 #' @param shap_mean .
 #' @param shap_dir .
 #' @param shap_box .
 #' @param shap_swarm .
 #' @param olden .
+#' @param show_shap .
+#' @param show_olden .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$summary} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$summary_train} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$summary_test} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$model} \tab \tab \tab \tab \tab The underlying \code{aov} object \cr
@@ -2336,15 +2456,15 @@ MulticlassClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 #'
-#' \code{results$summary_train$asDF}
+#' \code{results$summary$asDF}
 #'
-#' \code{as.data.frame(results$summary_train)}
+#' \code{as.data.frame(results$summary)}
 #'
 #' @export
 MulticlassClassification <- function(
+    data,
     disable = FALSE,
     seed = 42,
-    data,
     dep = NULL,
     covs = NULL,
     factors = NULL,
@@ -2437,12 +2557,15 @@ MulticlassClassification <- function(
     plot_lift_curve = FALSE,
     plot_dist_by_class = FALSE,
     plot_confusion_matrix = FALSE,
+    one_v_rest = FALSE,
     pfi = FALSE,
     shap_mean = FALSE,
     shap_dir = FALSE,
     shap_box = FALSE,
     shap_swarm = FALSE,
-    olden = FALSE) {
+    olden = FALSE,
+    show_shap = TRUE,
+    show_olden = TRUE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("MulticlassClassification requires jmvcore to be installed (restart may be required)")
@@ -2559,12 +2682,15 @@ MulticlassClassification <- function(
         plot_lift_curve = plot_lift_curve,
         plot_dist_by_class = plot_dist_by_class,
         plot_confusion_matrix = plot_confusion_matrix,
+        one_v_rest = one_v_rest,
         pfi = pfi,
         shap_mean = shap_mean,
         shap_dir = shap_dir,
         shap_box = shap_box,
         shap_swarm = shap_swarm,
-        olden = olden)
+        olden = olden,
+        show_shap = show_shap,
+        show_olden = show_olden)
 
     analysis <- MulticlassClassificationClass$new(
         options = options,

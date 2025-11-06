@@ -9,11 +9,11 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
             disable = FALSE,
             seed = 42,
             dep = NULL,
+            dep_level = NULL,
             covs = NULL,
             factors = NULL,
             stdCovs = NULL,
             encCat = NULL,
-            dep_level = NULL,
             mode = "neural_network",
             hidden_neurons_tune = "range_neurons",
             penalty_tune = "range_penalty",
@@ -107,7 +107,10 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
             shap_box = FALSE,
             shap_swarm = FALSE,
             olden = FALSE,
-            sobol = FALSE, ...) {
+            sobol = FALSE,
+            show_shap = TRUE,
+            show_olden = TRUE,
+            show_sobol = TRUE, ...) {
 
             super$initialize(
                 package="EasyML",
@@ -132,6 +135,10 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                 permitted=list(
                     "factor"),
                 default=NULL)
+            private$..dep_level <- jmvcore::OptionLevel$new(
+                "dep_level",
+                dep_level,
+                variable="(dep)")
             private$..covs <- jmvcore::OptionVariables$new(
                 "covs",
                 covs,
@@ -157,9 +164,6 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                 "encCat",
                 encCat,
                 default=NULL)
-            private$..dep_level <- jmvcore::OptionString$new(
-                "dep_level",
-                dep_level)
             private$..mode <- jmvcore::OptionList$new(
                 "mode",
                 mode,
@@ -543,7 +547,7 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                     "mcc",
                     "j_index",
                     "detection_prevalence",
-                    "auc_roc",
+                    "roc_auc",
                     "pr_auc",
                     "gain_capture",
                     "brier_score"),
@@ -668,6 +672,21 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                 "sobol",
                 sobol,
                 default=FALSE)
+            private$..show_shap <- jmvcore::OptionBool$new(
+                "show_shap",
+                show_shap,
+                hidden=TRUE,
+                default=TRUE)
+            private$..show_olden <- jmvcore::OptionBool$new(
+                "show_olden",
+                show_olden,
+                hidden=TRUE,
+                default=TRUE)
+            private$..show_sobol <- jmvcore::OptionBool$new(
+                "show_sobol",
+                show_sobol,
+                hidden=TRUE,
+                default=TRUE)
             private$..pred_class <- jmvcore::OptionOutput$new(
                 "pred_class")
             private$..pred_prob <- jmvcore::OptionOutput$new(
@@ -678,11 +697,11 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
             self$.addOption(private$..disable)
             self$.addOption(private$..seed)
             self$.addOption(private$..dep)
+            self$.addOption(private$..dep_level)
             self$.addOption(private$..covs)
             self$.addOption(private$..factors)
             self$.addOption(private$..stdCovs)
             self$.addOption(private$..encCat)
-            self$.addOption(private$..dep_level)
             self$.addOption(private$..mode)
             self$.addOption(private$..hidden_neurons_tune)
             self$.addOption(private$..penalty_tune)
@@ -777,6 +796,9 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
             self$.addOption(private$..shap_swarm)
             self$.addOption(private$..olden)
             self$.addOption(private$..sobol)
+            self$.addOption(private$..show_shap)
+            self$.addOption(private$..show_olden)
+            self$.addOption(private$..show_sobol)
             self$.addOption(private$..pred_class)
             self$.addOption(private$..pred_prob)
             self$.addOption(private$..dataset_id)
@@ -785,11 +807,11 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
         disable = function() private$..disable$value,
         seed = function() private$..seed$value,
         dep = function() private$..dep$value,
+        dep_level = function() private$..dep_level$value,
         covs = function() private$..covs$value,
         factors = function() private$..factors$value,
         stdCovs = function() private$..stdCovs$value,
         encCat = function() private$..encCat$value,
-        dep_level = function() private$..dep_level$value,
         mode = function() private$..mode$value,
         hidden_neurons_tune = function() private$..hidden_neurons_tune$value,
         penalty_tune = function() private$..penalty_tune$value,
@@ -884,6 +906,9 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
         shap_swarm = function() private$..shap_swarm$value,
         olden = function() private$..olden$value,
         sobol = function() private$..sobol$value,
+        show_shap = function() private$..show_shap$value,
+        show_olden = function() private$..show_olden$value,
+        show_sobol = function() private$..show_sobol$value,
         pred_class = function() private$..pred_class$value,
         pred_prob = function() private$..pred_prob$value,
         dataset_id = function() private$..dataset_id$value),
@@ -891,11 +916,11 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
         ..disable = NA,
         ..seed = NA,
         ..dep = NA,
+        ..dep_level = NA,
         ..covs = NA,
         ..factors = NA,
         ..stdCovs = NA,
         ..encCat = NA,
-        ..dep_level = NA,
         ..mode = NA,
         ..hidden_neurons_tune = NA,
         ..penalty_tune = NA,
@@ -990,6 +1015,9 @@ BinaryClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
         ..shap_swarm = NA,
         ..olden = NA,
         ..sobol = NA,
+        ..show_shap = NA,
+        ..show_olden = NA,
+        ..show_sobol = NA,
         ..pred_class = NA,
         ..pred_prob = NA,
         ..dataset_id = NA)
@@ -1020,7 +1048,8 @@ BinaryClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                 title="Binary Classification",
                 refs=list(
                     "EasyML",
-                    "MLwrap"))
+                    "MLwrap",
+                    "MLwrap_tutorial"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
@@ -1198,6 +1227,10 @@ BinaryClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                     title="$key",
                     rows=1,
                     columns=list(
+                        list(
+                            `name`="metric", 
+                            `title`="Metric", 
+                            `type`="text"),
                         list(
                             `name`="estimate", 
                             `title`="Estimate", 
@@ -1726,11 +1759,12 @@ BinaryClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
 #' @param seed .
 #' @param data the data as a data frame
 #' @param dep the fixed factors from \code{data}
+#' @param dep_level The level of the outcome variable that represents the
+#'   event of interest.
 #' @param covs the covariates from \code{data}
 #' @param factors the fixed factors from \code{data}
 #' @param stdCovs .
 #' @param encCat .
-#' @param dep_level .
 #' @param mode .
 #' @param hidden_neurons_tune .
 #' @param penalty_tune .
@@ -1843,6 +1877,9 @@ BinaryClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
 #' @param shap_swarm .
 #' @param olden .
 #' @param sobol .
+#' @param show_shap .
+#' @param show_olden .
+#' @param show_sobol .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
@@ -1870,11 +1907,11 @@ BinaryClassification <- function(
     seed = 42,
     data,
     dep = NULL,
+    dep_level,
     covs = NULL,
     factors = NULL,
     stdCovs = NULL,
     encCat = NULL,
-    dep_level,
     mode = "neural_network",
     hidden_neurons_tune = "range_neurons",
     penalty_tune = "range_penalty",
@@ -1968,7 +2005,10 @@ BinaryClassification <- function(
     shap_box = FALSE,
     shap_swarm = FALSE,
     olden = FALSE,
-    sobol = FALSE) {
+    sobol = FALSE,
+    show_shap = TRUE,
+    show_olden = TRUE,
+    show_sobol = TRUE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("BinaryClassification requires jmvcore to be installed (restart may be required)")
@@ -1994,11 +2034,11 @@ BinaryClassification <- function(
         disable = disable,
         seed = seed,
         dep = dep,
+        dep_level = dep_level,
         covs = covs,
         factors = factors,
         stdCovs = stdCovs,
         encCat = encCat,
-        dep_level = dep_level,
         mode = mode,
         hidden_neurons_tune = hidden_neurons_tune,
         penalty_tune = penalty_tune,
@@ -2092,7 +2132,10 @@ BinaryClassification <- function(
         shap_box = shap_box,
         shap_swarm = shap_swarm,
         olden = olden,
-        sobol = sobol)
+        sobol = sobol,
+        show_shap = show_shap,
+        show_olden = show_olden,
+        show_sobol = show_sobol)
 
     analysis <- BinaryClassificationClass$new(
         options = options,

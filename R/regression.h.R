@@ -99,7 +99,10 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             shap_box = FALSE,
             shap_swarm = FALSE,
             olden = FALSE,
-            sobol = FALSE, ...) {
+            sobol = FALSE,
+            show_shap = TRUE,
+            show_olden = TRUE,
+            show_sobol = TRUE, ...) {
 
             super$initialize(
                 package="EasyML",
@@ -628,6 +631,21 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "sobol",
                 sobol,
                 default=FALSE)
+            private$..show_shap <- jmvcore::OptionBool$new(
+                "show_shap",
+                show_shap,
+                hidden=TRUE,
+                default=TRUE)
+            private$..show_olden <- jmvcore::OptionBool$new(
+                "show_olden",
+                show_olden,
+                hidden=TRUE,
+                default=TRUE)
+            private$..show_sobol <- jmvcore::OptionBool$new(
+                "show_sobol",
+                show_sobol,
+                hidden=TRUE,
+                default=TRUE)
             private$..residuals <- jmvcore::OptionOutput$new(
                 "residuals")
             private$..predictions <- jmvcore::OptionOutput$new(
@@ -729,6 +747,9 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..shap_swarm)
             self$.addOption(private$..olden)
             self$.addOption(private$..sobol)
+            self$.addOption(private$..show_shap)
+            self$.addOption(private$..show_olden)
+            self$.addOption(private$..show_sobol)
             self$.addOption(private$..residuals)
             self$.addOption(private$..predictions)
             self$.addOption(private$..dataset_id)
@@ -828,6 +849,9 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         shap_swarm = function() private$..shap_swarm$value,
         olden = function() private$..olden$value,
         sobol = function() private$..sobol$value,
+        show_shap = function() private$..show_shap$value,
+        show_olden = function() private$..show_olden$value,
+        show_sobol = function() private$..show_sobol$value,
         residuals = function() private$..residuals$value,
         predictions = function() private$..predictions$value,
         dataset_id = function() private$..dataset_id$value),
@@ -926,6 +950,9 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..shap_swarm = NA,
         ..olden = NA,
         ..sobol = NA,
+        ..show_shap = NA,
+        ..show_olden = NA,
+        ..show_sobol = NA,
         ..residuals = NA,
         ..predictions = NA,
         ..dataset_id = NA)
@@ -956,7 +983,8 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Regression",
                 refs=list(
                     "EasyML",
-                    "MLwrap"))
+                    "MLwrap",
+                    "MLwrap_tutorial"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text",
@@ -1055,6 +1083,10 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     title="$key",
                     rows=1,
                     columns=list(
+                        list(
+                            `name`="metric", 
+                            `title`="Metric", 
+                            `type`="text"),
                         list(
                             `name`="estimate", 
                             `title`="Estimate", 
@@ -1873,6 +1905,9 @@ RegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param shap_swarm .
 #' @param olden .
 #' @param sobol .
+#' @param show_shap .
+#' @param show_olden .
+#' @param show_sobol .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
@@ -1990,7 +2025,10 @@ Regression <- function(
     shap_box = FALSE,
     shap_swarm = FALSE,
     olden = FALSE,
-    sobol = FALSE) {
+    sobol = FALSE,
+    show_shap = TRUE,
+    show_olden = TRUE,
+    show_sobol = TRUE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("Regression requires jmvcore to be installed (restart may be required)")
@@ -2105,7 +2143,10 @@ Regression <- function(
         shap_box = shap_box,
         shap_swarm = shap_swarm,
         olden = olden,
-        sobol = sobol)
+        sobol = sobol,
+        show_shap = show_shap,
+        show_olden = show_olden,
+        show_sobol = show_sobol)
 
     analysis <- RegressionClass$new(
         options = options,

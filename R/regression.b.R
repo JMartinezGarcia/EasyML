@@ -14,7 +14,7 @@ RegressionClass <- R6::R6Class(
 
         .init = function(){
 
-            private$.checkArguments()
+            #private$.checkArguments()
             private$.dat <- NULL
             private$.form <- NULL
             private$.sobol_jansen <- FALSE
@@ -706,7 +706,7 @@ RegressionClass <- R6::R6Class(
 
         .createNN = function(analysis_object, hyp_list){
 
-            analysis_object <- MLwrap::build_model(analysis_object,"Random Forest")
+            analysis_object <- MLwrap::build_model(analysis_object,"SVM")
 
             hyp_nn <- HyperparamsNN_nnet$new(hyp_list)
 
@@ -873,9 +873,9 @@ RegressionClass <- R6::R6Class(
 
             }
 
-            best_hyp$estimate <- mean_best_hyp
+            best_hyp$metric <- self$options$metrics
 
-            #if "NAN" replace 0
+            best_hyp$estimate <- mean_best_hyp
 
             best_hyp$std <- std_best_hyp
 

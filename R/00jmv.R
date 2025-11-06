@@ -14,5 +14,13 @@
         `author`="Mart\u00EDnez-Garc\u00EDa, J., Monta\u00F1o, J. J., & Ses\u00E9, A.", 
         `year`=2025, 
         `title`="MLwrap: Machine Learning Modelling for Everyone", 
-        `publisher`="(Version 0.2.1) [R package]. URL https://CRAN.R-project.org/package=MLwrap", 
-        `url`="https://CRAN.R-project.org/package=MLwrap"))
+        `publisher`="(Version 0.2.2) [R package]. URL https://CRAN.R-project.org/package=MLwrap", 
+        `url`="https://CRAN.R-project.org/package=MLwrap"), 
+    `MLwrap_tutorial`=list(
+        `type`="article", 
+        `author`="Jim\u00E9nez, R., Mart\u00EDnez-Garc\u00EDa, J., Monta\u00F1o, J. J., & Ses\u00E9, A.", 
+        `year`=2025, 
+        `title`="MLwrap: Simplifying Machine Learning workflows in R", 
+        `publisher`="Psyarxiv", 
+        `doi`="doi:10.31234/osf.io/j6m4z_v1", 
+        `url`="https://doi.org/10.31234/osf.io/j6m4z_v1"))

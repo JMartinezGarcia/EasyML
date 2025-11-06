@@ -42,12 +42,13 @@ children:
     stretchFactor: 1
     children:
       - type: LayoutBox
-        margin: large
+        name: levels
+        stretchFactor: 1
         children:
           - type: TextBox
             name: dep_level
             format: string
-            width: largest
+            stretchFactor: 1
       - type: Supplier
         name: covsSupplier
         label: Components
@@ -56,6 +57,7 @@ children:
         format: variables
         children:
           - type: TargetLayoutBox
+            stretchFactor: 1
             children:
               - type: ListBox
                 name: stdCovs
@@ -638,6 +640,10 @@ children:
             name: plot_dist_by_class
           - type: CheckBox
             name: plot_confusion_matrix
+          - type: Label
+            label: <b> One vs Rest </b>
+          - type: CheckBox
+            name: one_v_rest
   - type: CollapseBox
     collapsed: true
     label: Sensitivity Analysis
@@ -663,12 +669,16 @@ children:
             children:
               - type: CheckBox
                 name: shap_mean
+                enable: (show_shap)
               - type: CheckBox
                 name: shap_dir
+                enable: (show_shap)
               - type: CheckBox
                 name: shap_box
+                enable: (show_shap)
               - type: CheckBox
                 name: shap_swarm
+                enable: (show_shap)
           - type: Label
             label: <b> Olden's Method &nbsp; &nbsp; &nbsp;</b>
           - type: LayoutBox
@@ -677,6 +687,7 @@ children:
             children:
               - type: CheckBox
                 name: olden
+                enable: (show_olden)
   - type: CollapseBox
     collapsed: true
     label: Save Results

@@ -841,6 +841,21 @@ options:
       type: Bool
       default: false
 
+    - name: show_shap
+      type: Bool
+      hidden: true
+      default: true
+
+    - name: show_olden
+      type: Bool
+      hidden: true
+      default: true
+
+    - name: show_sobol
+      type: Bool
+      hidden: true
+      default: true
+
     - name: residuals 
       title: Residuals
       type: Output

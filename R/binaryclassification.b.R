@@ -24,30 +24,16 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
             private$.sobol_jansen <- FALSE
             private$.feature_names <- NULL
 
-            private$.checkArguments()
+            #private$.checkArguments()
 
-            if (!is.null(self$options$dep_level)){
+            if (!is.null(self$options$dep)){
 
-                # Remove quotations and trim white spaces
+                all_levels <- levels(as.factor(self$data[[self$options$dep]]))
 
-                 dep_lvls <- base::scan(text = self$options$dep_level,
-                                        what = "", sep = ",", quote = "\"", quiet = TRUE)
-                 dep_lvls <- base::trimws(dep_lvls)
+                levels <- c(setdiff(all_levels, as.character(self$options$dep_level))
+                            , as.character(self$options$dep_level))
 
-
-                 dep_lvls <- private$.check_levels(dep_lvls)
-
-                 private$.class_names <- dep_lvls
-
-            }
-
-            else {
-
-                if (!is.null(self$options$dep)){
-
-                    private$.class_names <- levels(as.factor(self$data[[self$options$dep]]))
-
-                }
+                private$.class_names <- levels
 
             }
 
@@ -312,12 +298,35 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
             }
 
+            positive_class <- private$.class_names[2]
+
+            if (!is.null(self$options$dep)){
+
+                dep_col <- self$options$dep
+
+                imbalance_text <- self$data |>
+                    dplyr::count(.data[[dep_col]], name = "n") |>
+                    dplyr::rename(class = 1) |>
+                    dplyr::mutate(pct = n / sum(n) * 100) |>
+                    glue::glue_data("- {class} : {n} ({round(pct, 1)}%)") |>
+                    glue::glue_collapse(sep = "\n") |>
+                    (\(x) glue::glue("Class Imbalance:\n\n{x}"))()
+            }
+
+            else {imbalance_text <- ""}
+
+
             content = glue::glue("
 
-                                    Model: {model_name}
+  Model: {model_name}
 
-                                    Random Seed: {self$options$seed}"
-            )
+  Random Seed: {self$options$seed}
+
+  Positive class: {self$options$dep_level}
+
+  {imbalance_text}
+
+                    ")
 
             self$results$text$setContent(content)
 
@@ -772,7 +781,7 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
         .createNN = function(analysis_object, hyp_list){
 
-            analysis_object <- MLwrap::build_model(analysis_object,"Random Forest")
+            analysis_object <- MLwrap::build_model(analysis_object,"SVM")
 
             hyp_nn <- HyperparamsNN_nnet$new(hyp_list)
 
@@ -927,8 +936,6 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                  best_hyp <- analysis_object$hyperparameters$hyperparams_constant
 
-                 ### WHAT IF TUNER IS NULL??
-
                  best_hyp <- c(best_hyp, as.list(tune::show_best(analysis_object$tuner_fit, n = 1))[hyp_names_tune])
 
                  mean_best_hyp <- tune::show_best(analysis_object$tuner_fit, n = 1)$mean
@@ -940,6 +947,8 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
                      table$addColumn(name = name)
 
                  }
+
+                 best_hyp$metric <- self$options$metrics
 
                  best_hyp$estimate <- mean_best_hyp
 
@@ -1189,9 +1198,6 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
                 self$results$pred_class$setRowNums(rownames(self$data))
                 self$results$pred_class$setValues(predictions)
 
-                self$results$dataset_id$setRowNums(rownames(self$data))
-                self$results$dataset_id$setValues(predictions)
-
             }
 
             if (self$options$pred_prob && self$results$pred_prob$isNotFilled()) {
@@ -1213,7 +1219,6 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 self$results$dataset_id$setRowNums(rownames(self$data))
                 self$results$dataset_id$setValues(dataset_id)
-
 
             }
 
@@ -1317,37 +1322,6 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
         },
 
         # Utilities
-
-
-        .check_levels = function(dep_levels){
-
-            if (length(dep_levels) == 1){
-
-                stop("Please introduce both classes in order:
-                     0 (negative) 1 (positive) eg. 'Low', 'High'")
-
-            }
-
-            if (length(dep_levels) > 1){
-
-                if (!base::setequal(levels(as.factor(self$data[[self$options$dep]])), dep_levels)){
-
-                    stop(paste0(
-                        "Specified dependent variable's levels do not match true levels. ",
-                        "Accepted levels: ",
-                        paste(levels(as.factor(self$data[[self$options$dep]])), collapse = ", ")
-                    ))
-
-                }
-            } else {
-
-                dep_levels <- levels(as.factor(self$data[[self$options$dep]]))
-
-            }
-
-            return(dep_levels)
-
-        },
 
         .checkArguments = function(){
 

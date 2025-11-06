@@ -11,8 +11,8 @@ maintainer: Javier Marínez García <javier.nezcia@gmail.com>
 date: '2025-10-27'
 type: R
 description: >-
-  Machine Learning modelling based on MLwrap.Implements Neural Networks, Random
-  Forest, XGBoost and Support Vector Machines.
+  Machine Learning modelling based on MLwrap. Implements Neural Networks (MLP),
+  Random Forest, XGBoost and Support Vector Machines.
 analyses:
   - title: Regression
     name: Regression

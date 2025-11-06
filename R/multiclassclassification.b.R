@@ -17,37 +17,47 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
         .init = function(){
 
+            #self$options$shap_mean <- FALSE
+
             private$.dat <- NULL
             private$.form <- NULL
             private$.feature_names <- NULL
 
-            private$.checkArguments()
+            #private$.checkArguments()
 
             # Get output class names
 
-            if (!is.null(self$options$dep_level)){
+            if (!is.null(self$options$dep)){
 
-                # Remove quotations and trim white spaces
+                if (!is.null(self$options$dep_level)){
 
-                dep_lvls <- base::scan(text = self$options$dep_level,
-                                       what = "", sep = ",", quote = "\"", quiet = TRUE)
-                dep_lvls <- base::trimws(dep_lvls)
+                    # Remove quotations and trim white spaces
 
-                private$.check_levels(dep_lvls)
+                    dep_lvls <- base::scan(text = self$options$dep_level,
+                                           what = "", sep = ",", quote = "\"", quiet = TRUE)
+                    dep_lvls <- base::trimws(dep_lvls)
 
-                private$.class_names <- dep_lvls
+                    private$.check_levels(dep_lvls)
 
-            }
+                if (length(dep_lvls > 0)){
 
-            else {
+                    private$.class_names <- dep_lvls
 
-                if (!is.null(self$options$dep)){
+                } else {
 
                     private$.class_names <- levels(as.factor(self$data[[self$options$dep]]))
 
+                    }
+
+                }
+
+            else {
+
+                    private$.class_names <- levels(as.factor(self$data[[self$options$dep]]))
                 }
 
             }
+
 
             private$.initSummaryTable()
             private$.initResultsPlots()
@@ -62,15 +72,15 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             metrics_set <- private$.getSummaryMetrics(self$options)
 
-            #self$results$summary$addItem(key = "Train Evaluation Summary")
-
-            #self$results$summary$addItem(key = "Test Evaluation Summary")
+            average_summary <- self$results$summary
 
             train_summary <- self$results$summary_train
 
             test_summary <- self$results$summary_test
 
             for (metric in metrics_set){
+
+                average_summary$addColumn(name = metric)
 
                 train_summary$addColumn(name = metric)
 
@@ -266,11 +276,16 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
         },
 
-        .getSummaryMetrics = function(options, add_class = FALSE){
+        .getSummaryMetrics = function(options, add_class = FALSE, add_dataset = FALSE){
 
             if (add_class){
 
                 metrics_set <- c("Class")
+            }
+
+            else if (add_dataset){
+
+                    metrics_set <- c("Dataset")
 
             } else {
 
@@ -349,12 +364,31 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             }
 
+            if (!is.null(self$options$dep)){
+
+                dep_col <- self$options$dep
+
+                imbalance_text <- self$data |>
+                    dplyr::count(.data[[dep_col]], name = "n") |>
+                    dplyr::rename(class = 1) |>
+                    dplyr::mutate(pct = n / sum(n) * 100) |>
+                    glue::glue_data("- {class} : {n} ({round(pct, 1)}%)") |>
+                    glue::glue_collapse(sep = "\n") |>
+                    (\(x) glue::glue("Class Imbalance:\n\n{x}"))()
+            }
+
+            else {imbalance_text <- ""}
+
+
             content = glue::glue("
 
-                                    Model: {model_name}
+  Model: {model_name}
 
-                                    Random Seed: {self$options$seed}"
-            )
+  Random Seed: {self$options$seed}
+
+  {imbalance_text}
+
+                    ")
 
             self$results$text$setContent(content)
 
@@ -540,6 +574,172 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             return(feat_names)
 
+        },
+
+        .calculate_average_results = function(){
+
+          train_data <- dplyr::filter(self$results$model$predictions, data_set == "train")
+          test_data <- dplyr::filter(self$results$model$predictions, data_set == "test")
+
+          class_names <- paste0(".pred_", private$.class_names)
+
+          # Train
+
+          sens_train <- yardstick::sensitivity(train_data, y, .pred_class,
+                                         estimator = "macro_weighted")
+
+
+          spec_train <- yardstick::specificity(train_data, y, .pred_class,
+                                               estimator = "macro_weighted")
+
+
+          recall_train <- yardstick::recall(train_data, y, .pred_class,
+                                               estimator = "macro_weighted")
+
+
+          prec_train <- yardstick::precision(train_data, y, .pred_class,
+                                               estimator = "macro_weighted")
+
+
+          mcc_train <- yardstick::mcc(train_data, y, .pred_class,
+                                               estimator = "macro_weighted")
+
+
+          jindex_train <- yardstick::j_index(train_data, y, .pred_class,
+                                      estimator = "macro_weighted")
+
+
+          fmeas_train <- yardstick::f_meas(train_data, y, .pred_class,
+                                      estimator = "macro_weighted")
+
+
+          kap_train <- yardstick::kap(train_data, y, .pred_class,
+                                      estimator = "macro_weighted")
+
+
+          acc_train <- yardstick::accuracy(train_data, y, .pred_class,
+                                      estimator = "macro_weighted")
+
+
+          bacc_train <- yardstick::bal_accuracy(train_data, y, .pred_class,
+                                      estimator = "macro_weighted")
+
+
+          detection_prevalence_train <- yardstick::detection_prevalence(train_data, y, .pred_class,
+                                      estimator = "macro_weighted")
+
+          roc_train <- yardstick::roc_auc(train_data, y, class_names,
+                                          estimator = "macro_weighted")
+
+          pr_train <- yardstick::pr_auc(train_data, y, class_names,
+                                        estimator = "macro_weighted")
+
+          gain_train <- yardstick::gain_capture(train_data, y, class_names,
+                                                estimator = "macro_weighted")
+
+          brier_train <- yardstick::brier_class(train_data, y, class_names,
+                                                estimator = "macro_weightd")
+
+
+          # Test
+
+          sens_test <- yardstick::sensitivity(test_data, y, .pred_class,
+                                               estimator = "macro_weighted")
+
+
+          spec_test <- yardstick::specificity(test_data, y, .pred_class,
+                                               estimator = "macro_weighted")
+
+
+          recall_test <- yardstick::recall(test_data, y, .pred_class,
+                                            estimator = "macro_weighted")
+
+
+          prec_test <- yardstick::precision(test_data, y, .pred_class,
+                                             estimator = "macro_weighted")
+
+
+          mcc_test <- yardstick::mcc(test_data, y, .pred_class,
+                                      estimator = "macro_weighted")
+
+
+          jindex_test <- yardstick::j_index(test_data, y, .pred_class,
+                                             estimator = "macro_weighted")
+
+
+          fmeas_test <- yardstick::f_meas(test_data, y, .pred_class,
+                                           estimator = "macro_weighted")
+
+
+          kap_test <- yardstick::kap(test_data, y, .pred_class,
+                                      estimator = "macro_weighted")
+
+
+          acc_test <- yardstick::accuracy(test_data, y, .pred_class,
+                                           estimator = "macro_weighted")
+
+
+          bacc_test <- yardstick::bal_accuracy(test_data, y, .pred_class,
+                                                estimator = "macro_weighted")
+
+
+          detection_prevalence_test <- yardstick::detection_prevalence(test_data, y, .pred_class,
+                                                                        estimator = "macro_weighted")
+
+          roc_test <- yardstick::roc_auc(test_data, y, class_names,
+                                          estimator = "macro_weighted")
+
+          pr_test <- yardstick::pr_auc(test_data, y, class_names,
+                                        estimator = "macro_weighted")
+
+          gain_test <- yardstick::gain_capture(test_data, y, class_names,
+                                                estimator = "macro_weighted")
+
+          brier_test <- yardstick::brier_class(test_data, y, class_names,
+                                                estimator = "macro_weightd")
+
+
+          # Save to df
+
+          train_df <- as.data.frame(
+                        list("Dataset" = "Train",
+                            "Sensitivity" = sens_train$.estimate,
+                           "Specificity" = spec_train$.estimate,
+                           "Recall" = recall_train$.estimate,
+                           "Precision" = prec_train$.estimate,
+                           "MCC" = mcc_train$.estimate,
+                           "J_index" = jindex_train$.estimate,
+                           "F1_score" = fmeas_train$.estimate,
+                           "Kappa" = kap_train$.estimate,
+                           "Accuracy" = acc_train$.estimate,
+                           "Balanced_Accuracy" = bacc_train$.estimate,
+                           "Detection_Prevalence" = detection_prevalence_train$.estimate,
+                           "AUC_ROC" = roc_train$.estimate,
+                           "AUC_PR" = pr_train$.estimate,
+                           "Gain_Capture" = gain_train$.estimate,
+                           "Brier_Score" = brier_train$.estimate
+                        ))
+
+          test_df <- as.data.frame(
+                        list("Dataset" = "Test",
+                            "Sensitivity" = sens_test$.estimate,
+                           "Specificity" = spec_test$.estimate,
+                           "Recall" = recall_test$.estimate,
+                           "Precision" = prec_test$.estimate,
+                           "MCC" = mcc_test$.estimate,
+                           "J_index" = jindex_test$.estimate,
+                           "F1_score" = fmeas_test$.estimate,
+                           "Kappa" = kap_test$.estimate,
+                           "Accuracy" = acc_test$.estimate,
+                           "Balanced_Accuracy" = bacc_test$.estimate,
+                           "Detection_Prevalence" = detection_prevalence_test$.estimate,
+                           "AUC_ROC" = roc_test$.estimate,
+                           "AUC_PR" = pr_test$.estimate,
+                           "Gain_Capture" = gain_test$.estimate,
+                           "Brier_Score" = brier_test$.estimate
+                ))
+
+          return(list(train_df = train_df, test_df = test_df))
         },
 
         .getHyperparameters = function(){
@@ -808,7 +1008,7 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
         .createNN = function(analysis_object, hyp_list){
 
-            analysis_object <- MLwrap::build_model(analysis_object,"Random Forest")
+            analysis_object <- MLwrap::build_model(analysis_object,"SVM")
 
             hyp_nn <- HyperparamsNN_nnet$new(hyp_list)
 
@@ -949,6 +1149,22 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
         .populateSummaryMetrics = function(){
 
+            # Summary Table
+
+            table_summary <- self$results$summary
+
+            summary_df <- private$.calculate_average_results()
+
+            train_res <- summary_df$train_df
+
+            test_res <- summary_df$test_df
+
+            metrics_set <- private$.getSummaryMetrics(self$options, add_dataset = TRUE)
+
+            table_summary$setRow(rowNo = 1, values = as.list(train_res[metrics_set][1,]))
+
+            table_summary$setRow(rowNo = 2, values = as.list(test_res[metrics_set][1,]))
+
             # Train And Test Summary Tables
 
             table_train <- self$results$summary_train
@@ -993,8 +1209,6 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             best_hyp <- analysis_object$hyperparameters$hyperparams_constant
 
-            ### WHAT IF TUNER IS NULL??
-
             best_hyp <- c(best_hyp, as.list(tune::show_best(analysis_object$tuner_fit, n = 1))[hyp_names_tune])
 
             mean_best_hyp <- tune::show_best(analysis_object$tuner_fit, n = 1)$mean
@@ -1006,6 +1220,8 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
                 table$addColumn(name = name)
 
             }
+
+            best_hyp$metric <- self$options$metrics
 
             best_hyp$estimate <- mean_best_hyp
 
@@ -1446,6 +1662,13 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
                     ))
 
                 }
+            } else if (length(dep_levels == 1)){
+
+                stop(paste0(
+                    "Dependent variable has more levels. ",
+                    "Accepted levels: ",
+                    paste(levels(as.factor(self$data[[self$options$dep]])), collapse = ", ")
+                ))
             }
         },
 

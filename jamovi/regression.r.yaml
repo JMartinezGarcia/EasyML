@@ -5,6 +5,7 @@ jrs:   '1.1'
 refs:
     - EasyML
     - MLwrap
+    - MLwrap_tutorial
 
 items:
     - name:  text
@@ -104,6 +105,9 @@ items:
         type: Table
         rows: 1
         columns:
+            - name: metric
+              title: "Metric"
+              type: text
             - name: estimate
               title: "Estimate"
               type: number

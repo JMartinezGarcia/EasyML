@@ -662,12 +662,16 @@ children:
                 children:
                   - type: CheckBox
                     name: shap_mean
+                    enable: (show_shap)
                   - type: CheckBox
                     name: shap_dir
+                    enable: (show_shap)
                   - type: CheckBox
                     name: shap_box
+                    enable: (show_shap)
                   - type: CheckBox
                     name: shap_swarm
+                    enable: (show_shap)
               - type: Label
                 label: <b> Olden's Method &nbsp; &nbsp; &nbsp;</b>
               - type: LayoutBox
@@ -676,6 +680,7 @@ children:
                 children:
                   - type: CheckBox
                     name: olden
+                    enable: (show_olden)
               - type: Label
                 label: <b> Sobol-Jansen Method </b>
               - type: LayoutBox
@@ -684,6 +689,7 @@ children:
                 children:
                   - type: CheckBox
                     name: sobol
+                    enable: (show_sobol)
       - type: CollapseBox
         collapsed: true
         label: Save Results

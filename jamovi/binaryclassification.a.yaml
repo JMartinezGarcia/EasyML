@@ -44,6 +44,13 @@ options:
       default:
       description:
           R: the fixed factors from `data`
+        
+    - name: dep_level
+      title: "Positive Class:"
+      type: Level
+      variable: (dep)
+      description: >-
+        The level of the outcome variable that represents the event of interest.
 
     - name: covs
       title: Covariates
@@ -77,10 +84,6 @@ options:
       title: Factor Encoding
       type: Variables
       default: null
-
-    - name: dep_level
-      title: "Dependent Variable Levels"
-      type: String
 
 
   #######################################
@@ -708,7 +711,7 @@ options:
           title: J_Index
         - name: detection_prevalence
           title: "Detection Prevalence"
-        - name: auc_roc
+        - name: roc_auc
           title: "AUC ROC"
         - name: pr_auc
           title: "AUC PR"
@@ -876,6 +879,21 @@ options:
       title: Sobol-Jansen Method
       type: Bool
       default: false
+
+    - name: show_shap
+      type: Bool
+      hidden: true
+      default: true
+
+    - name: show_olden
+      type: Bool
+      hidden: true
+      default: true
+
+    - name: show_sobol
+      type: Bool
+      hidden: true
+      default: true
 
 ## Outputs
 
