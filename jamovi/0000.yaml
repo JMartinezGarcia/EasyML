@@ -1,5 +1,5 @@
 ---
-title: Machine Learning Modelling
+title: 'EasyML: Machine Learning Modelling'
 name: EasyML
 version: 0.0.0
 jms: '1.0'
@@ -52,17 +52,8 @@ analyses:
     category: analyses
 datasets:
   - name: Simulated Data
-    path: matsim.xlsx
+    path: Matrix.omv
     description: simulated data for regression and classification
-  - name: Regression Example
-    path: regression_example.omv
-    description: Regression example using Multi-Layer Perceptron (MLP)
-  - name: Binary Classification Example
-    path: binary_classification_example.omv
-    description: Binary Classification example using Random Forest
-  - name: Multiclass Classification Example
-    path: multiclass_classification_example.omv
-    description: Multiclass Classification example using XGBoost
 usesNative: true
 minApp: 1.0.8
 

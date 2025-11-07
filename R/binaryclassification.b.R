@@ -30,6 +30,13 @@ BinaryClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::
 
                 all_levels <- levels(as.factor(self$data[[self$options$dep]]))
 
+                if (length(all_levels) > 2){
+
+                    stop("Dependant Variable has more than 2 classes.
+                         Please use 'Multiclass Classification'")
+
+                }
+
                 levels <- c(setdiff(all_levels, as.character(self$options$dep_level))
                             , as.character(self$options$dep_level))
 

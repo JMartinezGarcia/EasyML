@@ -29,6 +29,13 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
             if (!is.null(self$options$dep)){
 
+                if (length(levels(as.factor(self$data[[self$options$dep]]))) == 2){
+
+                    stop("Dependant Variable has 2 classes.
+                         Please use 'Binary Classification'")
+
+                }
+
                 if (!is.null(self$options$dep_level)){
 
                     # Remove quotations and trim white spaces
