@@ -111,7 +111,7 @@ MulticlassClassificationOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             show_olden = TRUE, ...) {
 
             super$initialize(
-                package="EasyML",
+                package="MLwrapj",
                 name="MulticlassClassification",
                 requiresData=TRUE,
                 ...)
@@ -1035,7 +1035,7 @@ MulticlassClassificationResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                 name="",
                 title="Multiclass Classification",
                 refs=list(
-                    "EasyML",
+                    "MLwrapj",
                     "MLwrap",
                     "MLwrap_tutorial"))
             self$add(jmvcore::Preformatted$new(
@@ -2289,7 +2289,7 @@ MulticlassClassificationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "EasyML",
+                package = "MLwrapj",
                 name = "MulticlassClassification",
                 version = c(1,0,0),
                 options = options,

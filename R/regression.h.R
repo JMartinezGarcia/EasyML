@@ -105,7 +105,7 @@ RegressionOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             show_sobol = TRUE, ...) {
 
             super$initialize(
-                package="EasyML",
+                package="MLwrapj",
                 name="Regression",
                 requiresData=TRUE,
                 ...)
@@ -982,7 +982,7 @@ RegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="",
                 title="Regression",
                 refs=list(
-                    "EasyML",
+                    "MLwrapj",
                     "MLwrap",
                     "MLwrap_tutorial"))
             self$add(jmvcore::Preformatted$new(
@@ -1767,7 +1767,7 @@ RegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "EasyML",
+                package = "MLwrapj",
                 name = "Regression",
                 version = c(1,0,0),
                 options = options,
