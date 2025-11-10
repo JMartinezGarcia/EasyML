@@ -1,6 +1,6 @@
 ---
 title: 'MLwrapj: Machine Learning Modelling'
-name: EasyML
+name: MLwrapj
 version: 0.0.0
 jms: '1.0'
 authors:
@@ -21,10 +21,12 @@ analyses:
     menuSubgroup: Regression
     menuTitle: Regression
     description: >
-      Linear regression is used to explore the relationship between a continuous
-      dependent variable, and one or more continuous and/or categorical
-      explanatory variables. Other statistical methods, such as ANOVA and
-      ANCOVA, are in reality just forms of linear regression.
+        Perform advanced regression analysis using an automated machine learning workflow.
+        This module includes data preprocessing, model training with multiple algorithms
+        (Multilayer Perceptron, Random Forest, XGBoost, and Support Vector Machine),
+        hyperparameter tuning, regression metrics and diagnostics, and sensitivity analysis
+        (including methods such as SHAP, PFI, Olden, and Sobol). Designed to simplify
+        powerful ML techniques for regression while ensuring interpretability and flexibility.
     category: analyses
   - title: Binary Classification
     name: BinaryClassification
@@ -33,10 +35,12 @@ analyses:
     menuSubgroup: Classification
     menuTitle: Binary Classification
     description: >
-      Linear regression is used to explore the relationship between a continuous
-      dependent variable, and one or more continuous and/or categorical
-      explanatory variables. Other statistical methods, such as ANOVA and
-      ANCOVA, are in reality just forms of linear regression.
+        Perform automated binary classification using a complete machine learning workflow.
+        This module includes data preprocessing, model training with multiple algorithms
+        (Multilayer Perceptron, Random Forest, XGBoost, and Support Vector Machine),
+        hyperparameter tuning, classification metrics and diagnostics, and sensitivity analysis
+        (including SHAP, PFI, Olden, and Sobol methods). Designed to make advanced ML modeling
+        accessible, interpretable, and reproducible.
     category: analyses
   - title: Multiclass Classification
     name: MulticlassClassification
@@ -45,10 +49,13 @@ analyses:
     menuSubgroup: Classification
     menuTitle: Multiclass Classification
     description: >
-      Linear regression is used to explore the relationship between a continuous
-      dependent variable, and one or more continuous and/or categorical
-      explanatory variables. Other statistical methods, such as ANOVA and
-      ANCOVA, are in reality just forms of linear regression.
+        Perform automated multiclass classification with a streamlined machine learning workflow.
+        This module covers data preprocessing, model training with several algorithms
+        (Multilayer Perceptron, Random Forest, XGBoost, and Support Vector Machine),
+        hyperparameter tuning, multiclass performance metrics and diagnostic tools, and
+        comprehensive sensitivity analysis (SHAP, PFI, Olden, and Sobol). Built to combine
+        automation, interpretability, and flexibility for multiclass prediction tasks.
+
     category: analyses
 datasets:
   - name: Simulated Data
