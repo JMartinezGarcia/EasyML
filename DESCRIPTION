@@ -1,4 +1,4 @@
-Package: EasyML
+Package:MLwrapj
 Type: Package
 Title: Machine Learning Modelling
 Version: 0.0.1
@@ -10,14 +10,14 @@ Description: A minimal jamovi library specifically designed to make the estimati
     essential tools to structure and execute each stage of a predictive or classification
     modeling workflow, aligning closely with the fundamental steps of the KDD methodology,
     from data selection and preparation, through model building and tuning, to the
-    interpretation and evaluation of results using Sensitivity Analysis. The 'EasyML' workflow
+    interpretation and evaluation of results using Sensitivity Analysis. The 'MLwrapj' workflow
     is organized into four core steps; preprocessing(), build_model(), fine_tuning(), and
     sensitivity_analysis(). These steps correspond, respectively, to data preparation and
     transformation, model construction, hyperparameter optimization, and sensitivity analysis.
     The user can access comprehensive model evaluation results including fit assessment metrics,
     plots, predictions, and performance diagnostics for ML models implemented through 'Neural
     Networks', 'Random Forest', 'XGBoost' (Extreme Gradient Boosting), and 'Support Vector
-    Machines' (SVM) algorithms. By streamlining these phases, 'EasyML' aims to simplify the
+    Machines' (SVM) algorithms. By streamlining these phases, 'MLwrapj' aims to simplify the
     implementation of ML techniques, allowing analysts and data scientists to focus on
     extracting actionable insights and meaningful patterns from large datasets, in line with
     the objectives of the KDD process.

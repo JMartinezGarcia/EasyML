@@ -3,7 +3,7 @@ name:  Regression
 title: Regression
 jrs:   '1.1'
 refs:
-    - EasyML
+    - MLwrapj
     - MLwrap
     - MLwrap_tutorial
 

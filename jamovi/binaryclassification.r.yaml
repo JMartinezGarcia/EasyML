@@ -3,7 +3,7 @@ name:  BinaryClassification
 title: Binary Classification
 jrs:   '1.1'
 refs:
-    - EasyML
+    - MLwrapj
     - MLwrap
     - MLwrap_tutorial
 
