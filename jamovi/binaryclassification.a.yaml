@@ -1,7 +1,7 @@
 ---
 name:  BinaryClassification
 title: "Binary Classification"
-menuGroup: EasyML
+menuGroup: MLwrapj
 version: '1.0.0'
 jas: '1.2'
 
@@ -44,7 +44,7 @@ options:
       default:
       description:
           R: the fixed factors from `data`
-        
+
     - name: dep_level
       title: "Positive Class:"
       type: Level
@@ -667,13 +667,13 @@ options:
       description:
           R: >
             log10()
-            
+
 #######################################
 #               TUNERS                #
 #######################################
 
 
-  
+
 
     - name: tuners
       type: List

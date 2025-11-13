@@ -1,7 +1,7 @@
 ---
 name:  Regression
 title: Regression
-menuGroup: EasyML
+menuGroup: MLwrapj
 version: '1.0.0'
 jas: '1.2'
 
@@ -67,7 +67,7 @@ options:
       description:
           R: the fixed factors from `data`
 
-    
+
     - name: stdCovs
       title: Covariate Scaling
       type: Variables
@@ -703,7 +703,7 @@ options:
 #               TUNERS                #
 #######################################
 
-    - name: tuners 
+    - name: tuners
       type: List
       title: Select Tuner
       options:
@@ -713,7 +713,7 @@ options:
           title: Grid Search CV
       default: none
 
-    - name: metrics 
+    - name: metrics
       type: List
       title: Select Metric
       options:
@@ -736,7 +736,7 @@ options:
       default: rmse
 
 
-    - name: plot_tuner_results 
+    - name: plot_tuner_results
       title: Plot Tuner Results
       type: Bool
       default: false
@@ -755,47 +755,47 @@ options:
       type: Bool
       default: false
 
-    - name: mpe 
+    - name: mpe
       title: MPE
       type: Bool
       default: false
 
-    - name: mape 
+    - name: mape
       title: MAPE
       type: Bool
       default: false
 
-    - name: smape 
+    - name: smape
       title: SMAPE
       type: Bool
       default: false
 
-    - name: ccc 
+    - name: ccc
       title: CCC
       type: Bool
       default: false
 
-    - name: rpiq 
+    - name: rpiq
       title: RPIQ
       type: Bool
       default: false
 
-    - name: rsq 
+    - name: rsq
       title: RSQ
       type: Bool
       default: false
 
-    - name: plot_residuals_v_predictions 
+    - name: plot_residuals_v_predictions
       title: Plot Residuals vs Predictions
       type: Bool
       default: false
 
-    - name: plot_residuals_dist 
+    - name: plot_residuals_dist
       title: Plot Residuals Distribution
       type: Bool
       default: false
 
-    - name: plot_observed_v_predictions 
+    - name: plot_observed_v_predictions
       title: Plot Observed vs Predictions
       type: Bool
       default: false
@@ -806,37 +806,37 @@ options:
 #        Sensitivity Analysis                #
 ##############################################
 
-    - name: pfi 
+    - name: pfi
       title: Permutation Feature Importance
       type: Bool
       default: false
 
-    - name: shap_mean 
+    - name: shap_mean
       title: Mean Absolute Value
       type: Bool
       default: false
 
-    - name: shap_dir 
+    - name: shap_dir
       title: Directional Sensitivity
       type: Bool
       default: false
 
-    - name: shap_box 
+    - name: shap_box
       title: Boxplot
       type: Bool
       default: false
 
-    - name: shap_swarm 
+    - name: shap_swarm
       title: Swarmplot
       type: Bool
       default: false
 
-    - name: olden 
+    - name: olden
       title: Olden's Method
       type: Bool
       default: false
 
-    - name: sobol 
+    - name: sobol
       title: Sobol-Jansen Method
       type: Bool
       default: false
@@ -856,11 +856,11 @@ options:
       hidden: true
       default: true
 
-    - name: residuals 
+    - name: residuals
       title: Residuals
       type: Output
 
-    - name: predictions 
+    - name: predictions
       title: Predictions
       type: Output
 

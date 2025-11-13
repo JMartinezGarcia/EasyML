@@ -17,7 +17,7 @@ analyses:
   - title: Regression
     name: Regression
     ns: MLwrapj
-    menuGroup: EasyML
+    menuGroup: MLwrapj
     menuSubgroup: Regression
     menuTitle: Regression
     description: >
@@ -29,7 +29,7 @@ analyses:
   - title: Binary Classification
     name: BinaryClassification
     ns: MLwrapj
-    menuGroup: EasyML
+    menuGroup: MLwrapj
     menuSubgroup: Classification
     menuTitle: Binary Classification
     description: >
@@ -41,7 +41,7 @@ analyses:
   - title: Multiclass Classification
     name: MulticlassClassification
     ns: MLwrapj
-    menuGroup: EasyML
+    menuGroup: MLwrapj
     menuSubgroup: Classification
     menuTitle: Multiclass Classification
     description: >
