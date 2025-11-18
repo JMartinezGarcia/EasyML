@@ -54,6 +54,15 @@ datasets:
   - name: Simulated Data
     path: Matrix.omv
     description: simulated data for regression and classification
+  - name: Regression Example
+    path: Regression_Example.omv
+    description: Regression example with Neural Networks
+  - name: Binary Classification
+    path: BinaryClassification_Example.omv
+    description: Binary classification example with Random Forest
+  - name: Multiclass Classification
+    path: MulticlassClassification_Example.omv
+    description: Multiclass classification example with XGBoost
 usesNative: true
 minApp: 1.0.8
 

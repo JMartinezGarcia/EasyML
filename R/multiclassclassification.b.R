@@ -17,13 +17,11 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
 
         .init = function(){
 
-            #self$options$shap_mean <- FALSE
-
             private$.dat <- NULL
             private$.form <- NULL
             private$.feature_names <- NULL
 
-            #private$.checkArguments()
+            private$.checkArguments()
 
             # Get output class names
 
@@ -1680,19 +1678,6 @@ MulticlassClassificationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) 
         },
 
         .checkArguments = function(){
-
-            if ((self$options$mode == "svm") && (self$options$kernels != "linear") &&
-                any(self$options$shap_mean, self$options$shap_dir, self$options$shap_box, self$options$shap_swarm)){
-
-                stop("SHAP values for Support Vector Machines are only implemented for the linear kernel!")
-
-            }
-
-            if ((self$options$mode != "neural_network") && (self$options$olden)){
-
-                stop("Olden's method is only implemented for Neural Networks!")
-
-            }
 
             # Check all stdCovs are in covs and all encCat are in factors
 

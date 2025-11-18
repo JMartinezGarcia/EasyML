@@ -46,7 +46,7 @@ children:
     children:
       - type: Supplier
         name: covsSupplier
-        label: Components
+        label: Continuous Features
         persistentItems: false
         stretchFactor: 1
         format: variables
@@ -62,7 +62,7 @@ children:
                   type: VariableLabel
       - type: Supplier
         name: factorsSupplier
-        label: Components
+        label: Categorical Features
         persistentItems: false
         stretchFactor: 1
         format: variables

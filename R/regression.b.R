@@ -14,7 +14,7 @@ RegressionClass <- R6::R6Class(
 
         .init = function(){
 
-            #private$.checkArguments()
+            private$.checkArguments()
             private$.dat <- NULL
             private$.form <- NULL
             private$.sobol_jansen <- FALSE
@@ -1221,29 +1221,6 @@ RegressionClass <- R6::R6Class(
         # Utilities
 
         .checkArguments = function(){
-
-            if (self$options$sobol){
-
-                if (length(self$options$factors) > 0){
-
-                    stop("Sobol-Jansen does not allow categorical variables!")
-
-                }
-
-            }
-
-            if ((self$options$mode == "svm") && (self$options$kernels != "linear") &&
-                any(self$options$shap_mean, self$options$shap_dir, self$options$shap_box, self$options$shap_swarm)){
-
-                stop("SHAP values for Support Vector Machines are only implemented for the linear kernel!")
-
-            }
-
-            if ((self$options$mode != "neural_network") && (self$options$olden)){
-
-                stop("Olden's method is only implemented for Neural Networks!")
-
-            }
 
             # Check all stdCovs are in covs and all encCat are in factors
 
